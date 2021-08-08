@@ -35,8 +35,23 @@ namespace SpellWork.Spell
                     break;
             }
 
+            //MythicPlusSeasonEntry currentSeason = null;
+            //DBC.DBC.MythicPlusSeason.TryGetValue(mythicPlusSeasonId, out currentSeason);
+
             var contentTuningMods = DBC.DBC.ContentTuningXExpected.Values
-                .Where(ctxe => ctxe.ContentTuningID == contentTuningId && ctxe.MythicPlusSeasonID == mythicPlusSeasonId)
+                .Where(ctxe => ctxe.ContentTuningID == contentTuningId)
+                //.Where(ctxe =>
+                //{
+                //    if (currentSeason != null && DBC.DBC.MythicPlusSeason.TryGetValue(ctxe.MinMythicPlusSeasonID, out var minSeason))
+                //        if (currentSeason.SubSeason < minSeason.SubSeason)
+                //            return false;
+
+                //    if (currentSeason != null && DBC.DBC.MythicPlusSeason.TryGetValue(ctxe.MaxMythicPlusSeasonID, out var maxSeason))
+                //        if (currentSeason.SubSeason >= maxSeason.SubSeason)
+                //            return false;
+
+                //    return true;
+                //})
                 .Where(ctxe => DBC.DBC.ExpectedStatMod.ContainsKey(ctxe.ExpectedStatModID))
                 .Select(ctxe => DBC.DBC.ExpectedStatMod[ctxe.ExpectedStatModID]);
 

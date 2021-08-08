@@ -93,6 +93,7 @@
     <Compile Include="DBC\Structures\DifficultyEntry.cs" />
     <Compile Include="DBC\Structures\ExpectedStatEntry.cs" />
     <Compile Include="DBC\Structures\ExpectedStatModEntry.cs" />
+    <Compile Include="DBC\Structures\ItemXItemEffectEntry.cs" />
     <Compile Include="DBC\Structures\ItemEffectEntry.cs" />
     <Compile Include="DBC\Structures\ItemEntry.cs" />
     <Compile Include="DBC\Structures\ItemSparseEntry.cs" />

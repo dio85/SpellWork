@@ -7,7 +7,6 @@ namespace SpellWork.DBC.Structures
         [Index(true)]
         public uint ID;
         public int SpellID;
-        public int Class;
         public uint MinScalingLevel;
         public uint MaxScalingLevel;
         public short ScalesFromItemLevel;

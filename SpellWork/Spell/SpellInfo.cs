@@ -585,7 +585,10 @@ namespace SpellWork.Spell
 
             if (RequiredAreasId > 0)
             {
-                var areas = DBC.DBC.AreaGroupMember.Values.Where(ag => ag.AreaGroupID == RequiredAreasId).ToList();
+                var areas = (from ag in DBC.DBC.AreaGroupMember.Values where ag.AreaGroupID == RequiredAreasId
+                             join a in DBC.DBC.AreaTable.Values on (uint)ag.AreaID equals a.ID
+                             select a)
+                             .ToList();
                 if (areas.Count == 0)
                     rtb.AppendFormatLine("Cannot find area group id {0} in AreaGroupMember.db2!", RequiredAreasId);
                 else
@@ -593,15 +596,8 @@ namespace SpellWork.Spell
                     rtb.AppendLine();
                     rtb.SetBold();
                     rtb.AppendLine("Allowed areas:");
-                    foreach (var areaGroupMember in areas)
-                    {
-                        var areaId = areaGroupMember.AreaID;
-                        if (!DBC.DBC.AreaTable.ContainsKey(areaId))
-                            continue;
-
-                        var areaEntry = DBC.DBC.AreaTable[areaId];
-                        rtb.AppendFormatLine("{0} - {1} (Map: {2})", areaId, areaEntry.AreaName, areaEntry.ContinentID);
-                    }
+                    foreach (var areaEntry in areas)
+                        rtb.AppendFormatLine("{0} - {1} (Map: {2})", areaEntry.ID, areaEntry.AreaName, areaEntry.ContinentID);
 
                     rtb.AppendLine();
                 }
@@ -660,7 +656,7 @@ namespace SpellWork.Spell
                 float value = 0.0f;
                 if (level > 0)
                 {
-                    if (Scaling.Class == 0)
+                    if (effect.ScalingClass == 0)
                         return 0.0f;
 
                     if (Scaling.ScalesFromItemLevel != 0 || (AttributesEx11 & (uint)SpellAtributeEx11.SPELL_ATTR11_SCALES_WITH_ITEM_LEVEL) != 0)
@@ -673,8 +669,8 @@ namespace SpellWork.Spell
                         if (!DBC.DBC.RandPropPoints.TryGetValue(effectiveItemLevel, out randPropPoints))
                             randPropPoints = DBC.DBC.RandPropPoints.Last().Value;
 
-                        if (Scaling.Class == -8 || Scaling.Class == -9)
-                            value = Scaling.Class == -8 ? randPropPoints.DamageReplaceStatF : randPropPoints.DamageSecondaryF;
+                        if (effect.ScalingClass == -8 || effect.ScalingClass == -9)
+                            value = effect.ScalingClass == -8 ? randPropPoints.DamageReplaceStatF : randPropPoints.DamageSecondaryF;
                         else
                             value = randPropPoints.SuperiorF[0];
                     }
@@ -682,7 +678,7 @@ namespace SpellWork.Spell
                     {
                         var gtScaling = GameTable<GtSpellScalingEntry>.GetRecord((int)level);
                         Debug.Assert(gtScaling != null);
-                        value = gtScaling.GetColumnForClass(Scaling.Class);
+                        value = gtScaling.GetColumnForClass(effect.ScalingClass);
                     }
                 }
 
@@ -942,7 +938,11 @@ namespace SpellWork.Spell
 
         private void AppendItemInfo(RichTextBox rtb)
         {
-            var items = DBC.DBC.ItemEffect.Where(effect => effect.Value.SpellID == ID).ToArray();
+            var items = (from effect in DBC.DBC.ItemEffect.Values
+                          where effect.SpellID == ID
+                          join ixie in DBC.DBC.ItemXItemEffect.Values on (int)effect.ID equals ixie.ItemEffectID
+                          select ixie)
+                         .ToArray();
             if (!items.Any())
                 return;
 
@@ -953,20 +953,20 @@ namespace SpellWork.Spell
 
             foreach (var item in items)
             {
-                if (!DBC.DBC.ItemSparse.ContainsKey(item.Value.ParentItemID))
+                if (!DBC.DBC.ItemSparse.ContainsKey(item.ItemID))
                 {
-                    rtb.AppendFormatLine($@"   Non-existing Item-sparse.db2 entry { item.Value.ParentItemID }");
+                    rtb.AppendFormatLine($@"   Non-existing Item-sparse.db2 entry { item.ItemID }");
                     continue;
                 }
 
-                var itemTemplate = DBC.DBC.ItemSparse[item.Value.ParentItemID];
+                var itemTemplate = DBC.DBC.ItemSparse[item.ItemID];
 
                 var name = itemTemplate.Display;
                 var description = itemTemplate.Description;
 
                 description = string.IsNullOrEmpty(description) ? string.Empty : $" - \"{ description }\"";
 
-                rtb.AppendFormatLine($@"   { item.Value.ParentItemID }: { name } { description }");
+                rtb.AppendFormatLine($@"   { item.ItemID }: { name } { description }");
             }
         }
 

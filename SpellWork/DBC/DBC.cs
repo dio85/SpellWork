@@ -70,6 +70,7 @@ namespace SpellWork.DBC
         public static Storage<ItemEntry>                        Item { get; set; }
         public static Storage<ItemEffectEntry>                  ItemEffect { get; set; }
         public static Storage<ItemSparseEntry>                  ItemSparse { get; set; }
+        public static Storage<ItemXItemEffectEntry>             ItemXItemEffect { get; set; }
 
         public static Storage<SpellReagentsEntry>               SpellReagents { get; set; }
         public static Storage<SpellReagentsCurrencyEntry>       SpellReagentsCurrency { get; set; }

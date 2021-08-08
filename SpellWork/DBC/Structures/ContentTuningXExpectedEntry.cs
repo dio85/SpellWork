@@ -7,7 +7,8 @@ namespace SpellWork.DBC.Structures
         [Index(true)]
         public uint ID;
         public int ExpectedStatModID;
-        public int MythicPlusSeasonID;
+        public int MinMythicPlusSeasonID;
+        public int MaxMythicPlusSeasonID;
         public uint ContentTuningID;
     }
 }

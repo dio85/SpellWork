@@ -12,7 +12,9 @@ namespace SpellWork.DBC.Structures
         public string Display2;
         public string Display1;
         public string Display;
+        public int ExpansionID;
         public float DmgVariance;
+        public int InstanceBound;
         public uint DurationInInventory;
         public float QualityModifier;
         public uint BagFamily;
@@ -42,7 +44,6 @@ namespace SpellWork.DBC.Structures
         public ushort GemProperties;
         public ushort SocketMatchEnchantmentId;
         public ushort TotemCategoryID;
-        public ushort InstanceBound;
         [Cardinality(2)]
         public ushort[] ZoneBound = new ushort[2];
         public ushort ItemSet;
@@ -55,7 +56,6 @@ namespace SpellWork.DBC.Structures
         public ushort RequiredSkill;
         public ushort ItemLevel;
         public short AllowableClass;
-        public byte ExpansionID;
         public byte ArtifactID;
         public byte SpellWeight;
         public byte SpellWeightCategory;
