@@ -91,6 +91,7 @@ namespace SpellWork.Spell
     /// </summary>
     public enum SpellEffects
     {
+        SPELL_EFFECT_NONE                               = 0,
         SPELL_EFFECT_INSTAKILL                          = 1,
         SPELL_EFFECT_SCHOOL_DAMAGE                      = 2,
         SPELL_EFFECT_DUMMY                              = 3,
@@ -376,6 +377,8 @@ namespace SpellWork.Spell
         SPELL_EFFECT_COMPLETE_CAMPAIGN                  = 283, // Flags all quests as completed that are assigned to campaign (MiscValueA)
         SPELL_EFFECT_SEND_CHAT_MESSAGE                  = 284, // MiscValue[0] = BroadcastTextID, MiscValue[1] = ChatType
         SPELL_EFFECT_MODIFY_KEYSTONE_2                  = 285,
+        SPELL_EFFECT_GRANT_BATTLEPET_EXPERIENCE         = 286,
+        SPELL_EFFECT_SET_GARRISON_FOLLOWER_LEVEL        = 287,
         TOTAL_SPELL_EFFECTS
     };
 
@@ -432,7 +435,7 @@ namespace SpellWork.Spell
         SPELL_AURA_TRACK_RESOURCES                              = 45,
         SPELL_AURA_46                                           = 46,   // Ignore all Gear test spells
         SPELL_AURA_MOD_PARRY_PERCENT                            = 47,
-        SPELL_AURA_48                                           = 48,   // One periodic spell
+        SPELL_AURA_PERIODIC_TRIGGER_SPELL_FROM_CLIENT           = 48,   // One periodic spell
         SPELL_AURA_MOD_DODGE_PERCENT                            = 49,
         SPELL_AURA_MOD_CRITICAL_HEALING_AMOUNT                  = 50,
         SPELL_AURA_MOD_BLOCK_PERCENT                            = 51,
@@ -455,7 +458,7 @@ namespace SpellWork.Spell
         SPELL_AURA_MOD_STALKED                                  = 68,
         SPELL_AURA_SCHOOL_ABSORB                                = 69,
         SPELL_AURA_PERIODIC_WEAPON_PERCENT_DAMAGE               = 70,
-        SPELL_AURA_STORE_TELEPORT_RETURN_POINT                  = 71,   // NYI
+        SPELL_AURA_STORE_TELEPORT_RETURN_POINT                  = 71,
         SPELL_AURA_MOD_POWER_COST_SCHOOL_PCT                    = 72,
         SPELL_AURA_MOD_POWER_COST_SCHOOL                        = 73,
         SPELL_AURA_REFLECT_SPELLS_SCHOOL                        = 74,
@@ -566,7 +569,7 @@ namespace SpellWork.Spell
         SPELL_AURA_MOD_POWER_DISPLAY                            = 179,
         SPELL_AURA_MOD_FLAT_SPELL_DAMAGE_VERSUS                 = 180,
         SPELL_AURA_MOD_SPELL_CURRENCY_REAGENTS_COUNT_PCT        = 181,  // NYI
-        SPELL_AURA_SUPPRESS_ITEM_PASSIVE_EFFECT_BY_SPELL_LABEL  = 182,  // NYI
+        SPELL_AURA_SUPPRESS_ITEM_PASSIVE_EFFECT_BY_SPELL_LABEL  = 182,
         SPELL_AURA_MOD_CRIT_CHANCE_VERSUS_TARGET_HEALTH         = 183,
         SPELL_AURA_MOD_ATTACKER_MELEE_HIT_CHANCE                = 184,
         SPELL_AURA_MOD_ATTACKER_RANGED_HIT_CHANCE               = 185,
@@ -602,8 +605,8 @@ namespace SpellWork.Spell
         SPELL_AURA_ARENA_PREPARATION                            = 215,
         SPELL_AURA_HASTE_SPELLS                                 = 216,
         SPELL_AURA_MOD_MELEE_HASTE_2                            = 217,
-        SPELL_AURA_ADD_PCT_MODIFIER_BY_SPELL_LABEL              = 218,  // NYI
-        SPELL_AURA_ADD_FLAT_MODIFIER_BY_SPELL_LABEL             = 219,  // NYI
+        SPELL_AURA_ADD_PCT_MODIFIER_BY_SPELL_LABEL              = 218,
+        SPELL_AURA_ADD_FLAT_MODIFIER_BY_SPELL_LABEL             = 219,
         SPELL_AURA_MOD_ABILITY_SCHOOL_MASK                      = 220,  // NYI
         SPELL_AURA_MOD_DETAUNT                                  = 221,
         SPELL_AURA_REMOVE_TRANSMOG_COST                         = 222,
@@ -691,7 +694,7 @@ namespace SpellWork.Spell
         SPELL_AURA_MOD_FAKE_INEBRIATE                           = 304,
         SPELL_AURA_MOD_MINIMUM_SPEED                            = 305,
         SPELL_AURA_MOD_CRIT_CHANCE_FOR_CASTER                   = 306,
-        SPELL_AURA_CAST_WHILE_WALKING_BY_SPELL_LABEL            = 307,  // NYI
+        SPELL_AURA_CAST_WHILE_WALKING_BY_SPELL_LABEL            = 307,
         SPELL_AURA_MOD_CRIT_CHANCE_FOR_CASTER_WITH_ABILITIES    = 308,
         SPELL_AURA_MOD_RESILIENCE                               = 309,  // NYI
         SPELL_AURA_MOD_CREATURE_AOE_DAMAGE_AVOIDANCE            = 310,
@@ -711,8 +714,8 @@ namespace SpellWork.Spell
         SPELL_AURA_OVERRIDE_UNLOCKED_AZERITE_ESSENCE_RANK       = 324,  // testing aura
         SPELL_AURA_LEARN_PVP_TALENT                             = 325,  // NYI
         SPELL_AURA_PHASE_GROUP                                  = 326,  // Puts the player in all the phases that are in the group with id = miscB
-        SPELL_AURA_PHASE_ALWAYS_VISIBLE                         = 327,  // NYI - sets PhaseShiftFlags::AlwaysVisible
-        SPELL_AURA_TRIGGER_SPELL_ON_POWER_PCT                   = 328,  // NYI Triggers spell when power goes above (MiscB = 0) or falls below (MiscB = 1) specified percent value (once, not every time condition has meet)
+        SPELL_AURA_PHASE_ALWAYS_VISIBLE                         = 327,  // Sets PhaseShiftFlags::AlwaysVisible
+        SPELL_AURA_TRIGGER_SPELL_ON_POWER_PCT                   = 328,  // Triggers spell when power goes above (MiscB = 0) or falls below (MiscB = 1) specified percent value (once, not every time condition has meet)
         SPELL_AURA_MOD_POWER_GAIN_PCT                           = 329,
         SPELL_AURA_CAST_WHILE_WALKING                           = 330,
         SPELL_AURA_FORCE_WEATHER                                = 331,
@@ -730,7 +733,7 @@ namespace SpellWork.Spell
         SPELL_AURA_MOD_MELEE_DAMAGE_FROM_CASTER                 = 343,  // NYI
         SPELL_AURA_MOD_AUTOATTACK_DAMAGE                        = 344,
         SPELL_AURA_BYPASS_ARMOR_FOR_CASTER                      = 345,
-        SPELL_AURA_ENABLE_ALT_POWER                             = 346,  // NYI
+        SPELL_AURA_ENABLE_ALT_POWER                             = 346,
         SPELL_AURA_MOD_SPELL_COOLDOWN_BY_HASTE                  = 347,
         SPELL_AURA_MOD_MONEY_GAIN                               = 348,  // Modifies gold gains from source: [Misc = 0, Quests][Misc = 1, Loot]
         SPELL_AURA_MOD_CURRENCY_GAIN                            = 349,
@@ -738,7 +741,7 @@ namespace SpellWork.Spell
         SPELL_AURA_MOD_CURRENCY_CATEGORY_GAIN_PCT               = 351,  // NYI
         SPELL_AURA_352                                          = 352,
         SPELL_AURA_MOD_CAMOUFLAGE                               = 353,  // NYI
-        SPELL_AURA_MOD_HEALING_DONE_PCT_VERSUS_TARGET_HEALTH    = 354,  // NYI Restoration Shaman mastery - mod healing based on target's health (less = more healing)
+        SPELL_AURA_MOD_HEALING_DONE_PCT_VERSUS_TARGET_HEALTH    = 354,  // Restoration Shaman mastery - mod healing based on target's health (less = more healing)
         SPELL_AURA_MOD_CASTING_SPEED                            = 355,  // NYI
         SPELL_AURA_PROVIDE_TOTEM_CATEGORY                       = 356,
         SPELL_AURA_ENABLE_BOSS1_UNIT_FRAME                      = 357,
@@ -758,10 +761,10 @@ namespace SpellWork.Spell
         SPELL_AURA_371                                          = 371,
         SPELL_AURA_372                                          = 372,
         SPELL_AURA_MOD_SPEED_NO_CONTROL                         = 373,  // NYI
-        SPELL_AURA_MODIFY_FALL_DAMAGE_PCT                       = 374,  // NYI
+        SPELL_AURA_MODIFY_FALL_DAMAGE_PCT                       = 374,
         SPELL_AURA_HIDE_MODEL_AND_EQUIPEMENT_SLOTS              = 375,
         SPELL_AURA_MOD_CURRENCY_GAIN_FROM_SOURCE                = 376,  // NYI
-        SPELL_AURA_CAST_WHILE_WALKING_2                         = 377,  // NYI
+        SPELL_AURA_CAST_WHILE_WALKING_ALL                       = 377,  // Enables casting all spells while moving
         SPELL_AURA_MOD_POSSESS_PET                              = 378,
         SPELL_AURA_MOD_MANA_REGEN_PCT                           = 379,
         SPELL_AURA_380                                          = 380,
@@ -780,7 +783,7 @@ namespace SpellWork.Spell
         SPELL_AURA_BLOCK_SPELLS_IN_FRONT                        = 393,  // NYI
         SPELL_AURA_SHOW_CONFIRMATION_PROMPT                     = 394,
         SPELL_AURA_AREA_TRIGGER                                 = 395,  // NYI
-        SPELL_AURA_TRIGGER_SPELL_ON_POWER_AMOUNT                = 396,  // NYI Triggers spell when health goes above (MiscA = 0) or falls below (MiscA = 1) specified percent value (once, not every time condition has meet)
+        SPELL_AURA_TRIGGER_SPELL_ON_POWER_AMOUNT                = 396,  // Triggers spell when power goes above (MiscA = 0) or falls below (MiscA = 1) specified percent value (once, not every time condition has meet)
         SPELL_AURA_BATTLEGROUND_PLAYER_POSITION_FACTIONAL       = 397,
         SPELL_AURA_BATTLEGROUND_PLAYER_POSITION                 = 398,
         SPELL_AURA_MOD_TIME_RATE                                = 399,
@@ -868,7 +871,7 @@ namespace SpellWork.Spell
         SPELL_AURA_CONVERT_CONSUMED_RUNE                        = 481,
         SPELL_AURA_482                                          = 482,
         SPELL_AURA_SUPPRESS_TRANSFORMS                          = 483,  // NYI
-        SPELL_AURA_484                                          = 484,
+        SPELL_AURA_ALLOW_INTERRUPT_SPELL                        = 484,  // NYI
         SPELL_AURA_MOD_MOVEMENT_FORCE_MAGNITUDE                 = 485,
         SPELL_AURA_486                                          = 486,
         SPELL_AURA_COSMETIC_MOUNTED                             = 487,
@@ -879,7 +882,7 @@ namespace SpellWork.Spell
         SPELL_AURA_492                                          = 492,
         SPELL_AURA_493                                          = 493, // 1 spell, 267116 - Animal Companion (modifies Call Pet)
         SPELL_AURA_SET_POWER_POINT_CHARGE                       = 494, // NYI
-        SPELL_AURA_TRIGGER_SPELL_ON_EXPIRE                      = 495, // NYI
+        SPELL_AURA_TRIGGER_SPELL_ON_EXPIRE                      = 495,
         SPELL_AURA_ALLOW_CHANGING_EQUIPMENT_IN_TORGHAST         = 496, // NYI
         SPELL_AURA_MOD_ANIMA_GAIN                               = 497, // NYI
         SPELL_AURA_CURRENCY_LOSS_PCT_ON_DEATH                   = 498, // NYI
@@ -917,6 +920,7 @@ namespace SpellWork.Spell
         TARGET_UNIT_DEST_AREA_ENEMY                 = 16,
         TARGET_DEST_DB                              = 17,
         TARGET_DEST_CASTER                          = 18,
+        TARGET_UNK_19                               = 19,
         TARGET_UNIT_CASTER_AREA_PARTY               = 20,
         TARGET_UNIT_TARGET_ALLY                     = 21,
         TARGET_SRC_CASTER                           = 22,
@@ -951,7 +955,7 @@ namespace SpellWork.Spell
         TARGET_GAMEOBJECT_SRC_AREA                  = 51,
         TARGET_GAMEOBJECT_DEST_AREA                 = 52,
         TARGET_DEST_TARGET_ENEMY                    = 53,
-        TARGET_UNIT_CONE_ENEMY_54                   = 54,
+        TARGET_UNIT_CONE_180_DEG_ENEMY              = 54, // Defaults to 180 if ConeDegrees is not set
         TARGET_DEST_CASTER_FRONT_LEAP               = 55, // for a leap spell
         TARGET_UNIT_CASTER_AREA_RAID                = 56,
         TARGET_UNIT_TARGET_RAID                     = 57,
@@ -959,7 +963,7 @@ namespace SpellWork.Spell
         TARGET_UNIT_CONE_ALLY                       = 59,
         TARGET_UNIT_CONE_ENTRY                      = 60,
         TARGET_UNIT_TARGET_AREA_RAID_CLASS          = 61,
-        TARGET_UNK_62                               = 62,
+        TARGET_DEST_CASTER_GROUND                   = 62,
         TARGET_DEST_TARGET_ANY                      = 63,
         TARGET_DEST_TARGET_FRONT                    = 64,
         TARGET_DEST_TARGET_BACK                     = 65,
@@ -1001,43 +1005,43 @@ namespace SpellWork.Spell
         TARGET_UNIT_PASSENGER_5                     = 101,
         TARGET_UNIT_PASSENGER_6                     = 102,
         TARGET_UNIT_PASSENGER_7                     = 103,
-        TARGET_UNIT_CONE_ENEMY_104                  = 104,
-        TARGET_UNIT_UNK_105                         = 105, // 1 spell
+        TARGET_UNIT_CONE_CASTER_TO_DEST_ENEMY       = 104,
+        TARGET_UNIT_CASTER_AND_PASSENGERS           = 105,
         TARGET_DEST_CHANNEL_CASTER                  = 106,
-        TARGET_UNK_DEST_AREA_UNK_107                = 107, // not enough info - only generic spells avalible
-        TARGET_GAMEOBJECT_CONE_108                  = 108,
-        TARGET_GAMEOBJECT_CONE_109                  = 109,
-        TARGET_UNIT_CONE_ENTRY_110                  = 110,
-        TARGET_UNK_111                              = 111,
-        TARGET_UNK_112                              = 112,
-        TARGET_UNK_113                              = 113,
-        TARGET_UNK_114                              = 114,
-        TARGET_UNK_115                              = 115,
-        TARGET_UNK_116                              = 116,
+        TARGET_DEST_NEARBY_ENTRY_2                  = 107,
+        TARGET_GAMEOBJECT_CONE_CASTER_TO_DEST_ENEMY = 108,
+        TARGET_GAMEOBJECT_CONE_CASTER_TO_DEST_ALLY  = 109,
+        TARGET_UNIT_CONE_CASTER_TO_DEST_ENTRY       = 110,
+        TARGET_UNK_111                              = 111, // NYI
+        TARGET_UNK_112                              = 112, // NYI
+        TARGET_UNK_113                              = 113, // NYI
+        TARGET_UNK_114                              = 114, // NYI
+        TARGET_UNIT_SRC_AREA_FURTHEST_ENEMY         = 115,
+        TARGET_UNIT_AND_DEST_LAST_ENEMY             = 116,
         TARGET_UNK_117                              = 117,
         TARGET_UNIT_TARGET_ALLY_OR_RAID             = 118, // If target is in your party or raid, all party and raid members will be affected
         TARGET_CORPSE_SRC_AREA_RAID                 = 119,
         TARGET_UNIT_CASTER_AND_SUMMONS              = 120,
-        TARGET_UNK_121                              = 121,
+        TARGET_CORPSE_TARGET_ALLY                   = 121,
         TARGET_UNIT_AREA_THREAT_LIST                = 122, // any unit on threat list
         TARGET_UNIT_AREA_TAP_LIST                   = 123,
-        TARGET_UNK_124                              = 124,
-        TARGET_DEST_CASTER_GROUND                   = 125,
-        TARGET_UNK_126                              = 126,
-        TARGET_UNK_127                              = 127,
-        TARGET_UNK_128                              = 128,
-        TARGET_UNIT_CONE_ENTRY_129                  = 129,
-        TARGET_UNK_130                              = 130,
+        TARGET_UNIT_TARGET_TAP_LIST                 = 124,
+        TARGET_DEST_CASTER_GROUND_2                 = 125,
+        TARGET_UNIT_CASTER_AREA_ENEMY_CLUMP         = 126, // NYI
+        TARGET_DEST_CASTER_ENEMY_CLUMP_CENTROID     = 127, // NYI
+        TARGET_UNIT_RECT_CASTER_ALLY                = 128,
+        TARGET_UNIT_RECT_CASTER_ENEMY               = 129,
+        TARGET_UNIT_RECT_CASTER                     = 130,
         TARGET_DEST_SUMMONER                        = 131,
         TARGET_DEST_TARGET_ALLY                     = 132,
         TARGET_UNIT_LINE_CASTER_TO_DEST_ALLY        = 133,
         TARGET_UNIT_LINE_CASTER_TO_DEST_ENEMY       = 134,
         TARGET_UNIT_LINE_CASTER_TO_DEST             = 135,
-        TARGET_UNK_136                              = 136,
-        TARGET_UNK_137                              = 137,
-        TARGET_UNK_138                              = 138,
+        TARGET_UNIT_CONE_CASTER_TO_DEST_ALLY        = 136,
+        TARGET_DEST_CASTER_MOVEMENT_DIRECTION       = 137,
+        TARGET_DEST_DEST_GROUND                     = 138,
         TARGET_UNK_139                              = 139,
-        TARGET_UNK_140                              = 140,
+        TARGET_DEST_CASTER_CLUMP_CENTROID           = 140, // NYI
         TARGET_UNK_141                              = 141,
         TARGET_UNK_142                              = 142,
         TARGET_UNK_143                              = 143,
