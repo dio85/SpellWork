@@ -157,6 +157,14 @@ namespace SpellWork.Extensions
                 clb.Items.Add(elem.ToString().NormalizeString(remove));
         }
 
+        public static void SetFlags<T>(this CheckedListBox clb, T[] values, string removePrefix)
+        {
+            clb.Items.Clear();
+
+            foreach (var elem in values)
+                clb.Items.Add(elem.ToString().NormalizeString(removePrefix));
+        }
+
         public static void SetEnumValues<T>(this ComboBox cb, string noValue)
         {
             var dt = new DataTable();

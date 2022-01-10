@@ -122,6 +122,7 @@
             this._lvProcAdditionalInfo = new System.Windows.Forms.ListView();
             this._chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this._chName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this._chDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this._tpSpellProcDB = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this._cbBinaryCompare = new System.Windows.Forms.CheckBox();
@@ -270,14 +271,14 @@
             // _tsmSettings
             // 
             this._tsmSettings.Name = "_tsmSettings";
-            this._tsmSettings.Size = new System.Drawing.Size(180, 22);
+            this._tsmSettings.Size = new System.Drawing.Size(116, 22);
             this._tsmSettings.Text = "Settings";
             this._tsmSettings.Click += new System.EventHandler(this.SettingsClick);
             // 
             // _tsmExit
             // 
             this._tsmExit.Name = "_tsmExit";
-            this._tsmExit.Size = new System.Drawing.Size(132, 22);
+            this._tsmExit.Size = new System.Drawing.Size(116, 22);
             this._tsmExit.Text = "Exit";
             this._tsmExit.Click += new System.EventHandler(this.ExitClick);
             // 
@@ -978,7 +979,7 @@
             // _clbProcFlags
             // 
             this._clbProcFlags.CheckOnClick = true;
-            this._clbProcFlags.ColumnWidth = 170;
+            this._clbProcFlags.ColumnWidth = 150;
             this._clbProcFlags.Dock = System.Windows.Forms.DockStyle.Fill;
             this._clbProcFlags.FormattingEnabled = true;
             this._clbProcFlags.Location = new System.Drawing.Point(3, 16);
@@ -1334,7 +1335,8 @@
             // 
             this._lvProcAdditionalInfo.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this._chID,
-            this._chName});
+            this._chName,
+            this._chDescription});
             this._lvProcAdditionalInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lvProcAdditionalInfo.FullRowSelect = true;
             this._lvProcAdditionalInfo.GridLines = true;
@@ -1350,13 +1352,17 @@
             // 
             // _chID
             // 
-            this._chID.Text = "Entry";
-            this._chID.Width = 100;
+            this._chID.Text = "ID";
             // 
             // _chName
             // 
             this._chName.Text = "Name";
-            this._chName.Width = 685;
+            this._chName.Width = 200;
+            // 
+            // _chDescription
+            // 
+            this._chDescription.Text = "Description";
+            this._chDescription.Width = 582;
             // 
             // _tpSpellProcDB
             // 
@@ -1923,6 +1929,7 @@
         private System.Windows.Forms.ListView _lvProcAdditionalInfo;
         private System.Windows.Forms.ColumnHeader _chID;
         private System.Windows.Forms.ColumnHeader _chName;
+        private System.Windows.Forms.ColumnHeader _chDescription;
         private System.Windows.Forms.SplitContainer splitContainer3;
         private System.Windows.Forms.SplitContainer splitContainer4;
         private System.Windows.Forms.SplitContainer splitContainer5;

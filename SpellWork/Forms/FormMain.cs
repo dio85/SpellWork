@@ -39,7 +39,16 @@ namespace SpellWork.Forms
             _cbProcSpellFamilyTree.SetEnumValues<SpellFamilyNames>("SpellFamilyTree");
             _cbProcFitstSpellFamily.SetEnumValues<SpellFamilyNames>("SpellFamilyName");
 
-            _clbSchools.SetFlags<SpellSchoolMask>("SPELL_SCHOOL_MASK_");
+            _clbSchools.SetFlags(new[]{
+                SpellSchoolMask.SPELL_SCHOOL_MASK_NONE,
+                SpellSchoolMask.SPELL_SCHOOL_MASK_NORMAL,
+                SpellSchoolMask.SPELL_SCHOOL_MASK_HOLY,
+                SpellSchoolMask.SPELL_SCHOOL_MASK_FIRE,
+                SpellSchoolMask.SPELL_SCHOOL_MASK_NATURE,
+                SpellSchoolMask.SPELL_SCHOOL_MASK_FROST,
+                SpellSchoolMask.SPELL_SCHOOL_MASK_SHADOW,
+                SpellSchoolMask.SPELL_SCHOOL_MASK_ARCANE
+            }, "SPELL_SCHOOL_MASK_");
             _clbProcFlags.SetFlags<ProcFlags>("PROC_FLAG_");
             _clbProcFlagHit.SetFlags<ProcFlagsHit>("PROC_HIT_");
 
@@ -84,7 +93,7 @@ namespace SpellWork.Forms
             try
             {
                 _scCompareRoot.SplitterDistance = (((Form)sender).Size.Width / 2) - 25;
-                _chName.Width = (((Form)sender).Size.Width - 140);
+                _chDescription.Width = (((Form)sender).Size.Width - 306);
             }
             // ReSharper disable EmptyGeneralCatchClause
             catch (Exception)
@@ -134,9 +143,9 @@ namespace SpellWork.Forms
                         LvProcSpellListSelectedIndexChanged(null, null);
                         break;
                     case 2:
-                        CompareFilterSpellTextChanged(null, null);
                         break;
                     case 3:
+                        CompareFilterSpellTextChanged(null, null);
                         break;
                 }
             }
@@ -339,12 +348,18 @@ namespace SpellWork.Forms
 
         private void TvFamilyTreeSelectedIndexChanged(object sender, EventArgs e)
         {
-            if (((ComboBox)sender).SelectedIndex == 0)
+            var selectedValue = ((ComboBox)sender).SelectedValue.ToInt32();
+            if (selectedValue == -1)
                 return;
             _tvFamilyTree.Nodes.Clear();
-            var spellfamily = (SpellFamilyNames)(((ComboBox)sender).SelectedValue.ToInt32());
 
-            ProcInfo.Fill(_tvFamilyTree, spellfamily);
+            // SPELLFAMILY_GENERIC proc records ignore SpellFamilyMask
+            // so we don't populate TreeView for performance
+            if (selectedValue == (int)SpellFamilyNames.SPELLFAMILY_GENERIC)
+                return;
+
+            ProcInfo.Fill(_tvFamilyTree, (SpellFamilyNames)selectedValue);
+            PopulateProcAdditionalInfo();
         }
 
         private void SetProcAttribute(SpellInfo spell)
@@ -357,7 +372,7 @@ namespace SpellWork.Forms
             _cbProcFitstSpellFamily.SelectedValue = spell.SpellFamilyName;
             _tbPPM.Text = @"0"; // need correct value
             _tbChance.Text = spell.ProcChance.ToString();
-            _tbCooldown.Text = (spell.RecoveryTime / 1000f).ToString(CultureInfo.InvariantCulture);
+            _tbCooldown.Text = spell.ProcCooldown.ToString(CultureInfo.InvariantCulture);
         }
 
         private void GetProcAttribute(SpellInfo spell)
@@ -422,32 +437,31 @@ namespace SpellWork.Forms
                 return;
 
             _bWrite.Enabled = true;
-            _lvProcAdditionalInfo.Items.Clear();
 
-            var mask = ((TreeView)sender).GetMask();
-
-            var query = from spell in DBC.DBC.SpellInfoStore.Values
-                        where
-                            spell.SpellFamilyName == ProcInfo.SpellProc.SpellFamilyName &&
-                            spell.SpellClassMask.ContainsElement(mask)
-                        join sk in DBC.DBC.SkillLineAbility.Values on spell.ID equals sk.Spell into temp1
-                        from skill in temp1.DefaultIfEmpty(new SkillLineAbilityEntry())
-                        join skl in DBC.DBC.SkillLine on skill.SkillLine equals skl.Key into temp2
-                        from SkillLine in temp2.DefaultIfEmpty()
-                        orderby spell.ID, skill.SkillLine
-                        select
-                            new
-                            {
-                                SpellID = spell.ID,
-                                SpellName = spell.NameAndSubname + " " + spell.Description,
-                                skill.SkillLine
-                            };
-
-            foreach (var lvi in
-                query.Select(str => new ListViewItem(new[] { str.SpellID.ToString(), str.SpellName }) { ImageKey = str.SkillLine != 0 ? "plus.ico" : "munus.ico" }))
-                _lvProcAdditionalInfo.Items.Add(lvi);
+            PopulateProcAdditionalInfo();
 
             GetProcAttribute(ProcInfo.SpellProc);
+        }
+
+        private void PopulateProcAdditionalInfo()
+        {
+            _lvProcAdditionalInfo.Items.Clear();
+            _lvProcAdditionalInfo.Items.AddRange(
+                _tvFamilyTree.Nodes.Cast<TreeNode>()
+                    .Where(familyBitNode => familyBitNode.Checked)
+                    .SelectMany(familyBitNode => familyBitNode.Nodes.Cast<TreeNode>())
+                    .Distinct()
+                    .OrderBy(familySpellNode => familySpellNode.Name.ToInt32())
+                    .Select(familySpellNode =>
+                    {
+                        var spell = DBC.DBC.SpellInfoStore[familySpellNode.Name.ToInt32()];
+
+                        return new ListViewItem(new[] { familySpellNode.Name, spell.NameAndSubname, spell.Description })
+                        {
+                            ImageKey = familySpellNode.ImageKey
+                        };
+                    })
+                    .ToArray());
         }
 
         #endregion
@@ -603,15 +617,22 @@ namespace SpellWork.Forms
                 return;
 
             var spellFamilyFlags = _tvFamilyTree.GetMask();
+
             // spell comment
             var comment = $" -- {ProcInfo.SpellProc.NameAndSubname}";
+
             // drop query
             var drop = $"DELETE FROM `spell_proc` WHERE `entry` IN ({ProcInfo.SpellProc.ID});";
+
             // insert query
+            var procFlags = _clbProcFlags.GetFlagsValue() != ProcInfo.SpellProc.ProcFlags ? _clbProcFlags.GetFlagsValue() : 0;
+            var procChance = _tbChance.Text.Replace(',', '.') != ProcInfo.SpellProc.ProcChance.ToString() ? _tbChance.Text.Replace(',', '.') : "0";
+            var procCooldown = _tbCooldown.Text.ToUInt32() != ProcInfo.SpellProc.ProcCooldown ? _tbCooldown.Text.ToUInt32() : 0;
+
             var insert = "INSERT INTO `spell_proc` (`SpellId`,`SchoolMask`,`SpellFamilyName`,`SpellFamilyMask0`,`SpellFamilyMask1`,`SpellFamilyMask2`,`SpellFamilyMask3`,`ProcFlags`,`SpellTypeMask`,`SpellPhaseMask`,`HitMask`,`AttributesMask`,`DisableEffectsMask`,`ProcsPerMinute`,`Chance`,`Cooldown`,`Charges`) VALUES\r\n"
                 + $"({ProcInfo.SpellProc.ID},0x{_clbSchools.GetFlagsValue():X2},"
                 + $"{_cbProcFitstSpellFamily.SelectedValue.ToUInt32()},0x{spellFamilyFlags[0]:X8},0x{spellFamilyFlags[1]:X8},0x{spellFamilyFlags[2]:X8},0x{spellFamilyFlags[3]:X8},"
-                + $"0x{_clbProcFlags.GetFlagsValue():X},0x0,0x0,0x{_clbProcFlagHit.GetFlagsValue():X},0x0,0x0,{_tbPPM.Text.Replace(',', '.')},{_tbChance.Text.Replace(',', '.')},{_tbCooldown.Text.Replace(',', '.')},0);";
+                + $"0x{procFlags:X},0x0,0x0,0x{_clbProcFlagHit.GetFlagsValue():X},0x0,0x0,{_tbPPM.Text.Replace(',', '.')},{procChance},{procCooldown},0);";
 
             _rtbSqlLog.AppendText(drop + "\r\n" + insert + comment + "\r\n\r\n");
             _rtbSqlLog.ColorizeCode();
@@ -633,14 +654,15 @@ namespace SpellWork.Forms
             _clbProcFlags.SetCheckedItemFromFlag((uint)proc.ProcFlags);
             _clbProcFlagHit.SetCheckedItemFromFlag((uint)proc.HitMask);
 
-            _cbProcSpellFamilyTree.SelectedValue = proc.SpellFamilyName;
-            _cbProcFitstSpellFamily.SelectedValue = proc.SpellFamilyName;
+            _cbProcSpellFamilyTree.SelectedValue = (uint)proc.SpellFamilyName;
+            _cbProcFitstSpellFamily.SelectedValue = (uint)proc.SpellFamilyName;
 
             _tbPPM.Text = proc.ProcsPerMinute.ToString(CultureInfo.InvariantCulture);
             _tbChance.Text = proc.Chance.ToString(CultureInfo.InvariantCulture);
             _tbCooldown.Text = proc.Cooldown.ToString();
 
             _tvFamilyTree.SetMask(proc.SpellFamilyMask);
+            PopulateProcAdditionalInfo();
 
             tabControl1.SelectedIndex = 1;
         }
