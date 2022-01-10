@@ -15,7 +15,8 @@ namespace SpellWork.Forms
         private void CbUseDbConnectCheckedChanged(object sender, EventArgs e)
         {
             _gbDbSetting.Enabled = ((CheckBox)sender).Checked;
-            this._bTestConnect.Enabled = _gbDbSetting.Enabled;
+            _cbReadOnlyDB.Enabled = _gbDbSetting.Enabled;
+            _bTestConnect.Enabled = _gbDbSetting.Enabled;
         }
 
         private void BSaveSettingsClick(object sender, EventArgs e)
@@ -25,7 +26,8 @@ namespace SpellWork.Forms
             Settings.Default.User = _tbUser.Text;
             Settings.Default.Pass = _tbPass.Text;
             Settings.Default.WorldDbName = _tbBase.Text;
-            Settings.Default.UseDbConnect = _cbUseDBConnect.Checked;
+            Settings.Default.UseDbConnect = _cbUseDB.Checked;
+            Settings.Default.DbIsReadOnly = _cbReadOnlyDB.Checked;
             Settings.Default.DbcPath = _tbPath.Text;
             Settings.Default.GtPath = _tbGtPath.Text;
             Settings.Default.Locale = _tbLocale.Text;
@@ -52,7 +54,8 @@ namespace SpellWork.Forms
             _tbUser.Text = Settings.Default.User;
             _tbPass.Text = Settings.Default.Pass;
             _tbBase.Text = Settings.Default.WorldDbName;
-            _gbDbSetting.Enabled = _cbUseDBConnect.Checked = Settings.Default.UseDbConnect;
+            _gbDbSetting.Enabled = _cbUseDB.Checked = Settings.Default.UseDbConnect;
+            _cbReadOnlyDB.Checked = Settings.Default.DbIsReadOnly;
             _tbPath.Text = Settings.Default.DbcPath;
             _tbGtPath.Text = Settings.Default.GtPath;
             _tbLocale.Text = Settings.Default.Locale;

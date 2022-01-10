@@ -97,6 +97,18 @@ namespace SpellWork.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DbIsReadOnly {
+            get {
+                return ((bool)(this["DbIsReadOnly"]));
+            }
+            set {
+                this["DbIsReadOnly"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("dbc")]
         public string DbcPath {
             get {

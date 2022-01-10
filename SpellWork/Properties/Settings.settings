@@ -20,6 +20,9 @@
     <Setting Name="UseDbConnect" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="DbIsReadOnly" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
     <Setting Name="DbcPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">dbc</Value>
     </Setting>

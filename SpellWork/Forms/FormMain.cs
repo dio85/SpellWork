@@ -39,9 +39,9 @@ namespace SpellWork.Forms
             _cbProcSpellFamilyTree.SetEnumValues<SpellFamilyNames>("SpellFamilyTree");
             _cbProcFitstSpellFamily.SetEnumValues<SpellFamilyNames>("SpellFamilyName");
 
-            _clbSchools.SetFlags<SpellSchools>();
+            _clbSchools.SetFlags<SpellSchoolMask>("SPELL_SCHOOL_MASK_");
             _clbProcFlags.SetFlags<ProcFlags>("PROC_FLAG_");
-            _clbProcFlagEx.SetFlags<ProcFlagsEx>("PROC_EX_");
+            _clbProcFlagHit.SetFlags<ProcFlagsHit>("PROC_HIT_");
 
             _cbSqlSpellFamily.SetEnumValues<SpellFamilyNames>("SpellFamilyName");
 
@@ -57,7 +57,7 @@ namespace SpellWork.Forms
             _cbAdvancedEffectFilter1CompareType.SetEnumValuesDirect<CompareType>(true);
             _cbAdvancedEffectFilter2CompareType.SetEnumValuesDirect<CompareType>(true);
 
-            ConnStatus();
+            RefreshConnectionStatus();
         }
 
         #region FORM
@@ -76,7 +76,7 @@ namespace SpellWork.Forms
         {
             var frm = new FormSettings();
             frm.ShowDialog(this);
-            ConnStatus();
+            RefreshConnectionStatus();
         }
 
         private void FormMainResize(object sender, EventArgs e)
@@ -93,7 +93,7 @@ namespace SpellWork.Forms
             }
         }
 
-        private void ConnStatus()
+        private void RefreshConnectionStatus()
         {
             MySqlConnection.TestConnect();
 
@@ -108,19 +108,6 @@ namespace SpellWork.Forms
                 _dbConnect.Text = @"No DB Connected";
                 _dbConnect.ForeColor = Color.Red;
             }
-        }
-
-        private void ConnectedClick(object sender, EventArgs e)
-        {
-            MySqlConnection.TestConnect();
-
-            if (MySqlConnection.Connected)
-                MessageBox.Show(@"Connection is successful!", @"MySQL Connections!", MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-            else
-                MessageBox.Show(@"Connection failed!", @"ERROR!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            ConnStatus();
         }
 
         private void TextBoxKeyPress(object sender, KeyPressEventArgs e)
@@ -377,9 +364,9 @@ namespace SpellWork.Forms
         {
             var SpellFamilyFlags = _tvFamilyTree.GetMask();
             var statusproc =
-                $"Spell ({spell.ID}) {spell.NameAndSubname}. Proc Event ==> SchoolMask 0x{_clbSchools.GetFlagsValue():X2}, SpellFamily {_cbProcFitstSpellFamily.SelectedValue}, 0x{SpellFamilyFlags[0]:X8} {SpellFamilyFlags[1]:X8} {SpellFamilyFlags[2]:X8} {SpellFamilyFlags[3]:X8}, procFlag 0x{_clbProcFlags.GetFlagsValue():X8}, procEx 0x{_clbProcFlagEx.GetFlagsValue():X8}, PPMRate {_tbPPM.Text.ToFloat()}";
+                $"Spell ({spell.ID}) {spell.NameAndSubname}. Proc ==> SchoolMask 0x{_clbSchools.GetFlagsValue():X2}, SpellFamily {_cbProcFitstSpellFamily.SelectedValue}, 0x{SpellFamilyFlags[0]:X8} {SpellFamilyFlags[1]:X8} {SpellFamilyFlags[2]:X8} {SpellFamilyFlags[3]:X8}, procFlag 0x{_clbProcFlags.GetFlagsValue():X8}, procEx 0x{_clbProcFlagHit.GetFlagsValue():X8}, PPMRate {_tbPPM.Text.ToFloat()}";
 
-            _gSpellProcEvent.Text = "Spell Proc Event    " + statusproc;
+            _gSpellProcEvent.Text = "Spell Proc    " + statusproc;
         }
 
         private void Search()
@@ -550,13 +537,13 @@ namespace SpellWork.Forms
                         _tbSqlProc.Text = form.Flags.ToString();
                     break;
                 }
-                case "_bSqlProcEx":
+                case "_bSqlProcFlagsHit":
                 {
-                    var val = _tbSqlProcEx.Text.ToUInt32();
-                    var form = new FormCalculateFlags(typeof(ProcFlagsEx), val, "PROC_EX_");
+                    var val = _tbSqlProcFlagsHit.Text.ToUInt32();
+                    var form = new FormCalculateFlags(typeof(ProcFlagsHit), val, "PROC_HIT_");
                     form.ShowDialog(this);
                     if (form.DialogResult == DialogResult.OK)
-                        _tbSqlProcEx.Text = form.Flags.ToString();
+                        _tbSqlProcFlagsHit.Text = form.Flags.ToString();
                     break;
                 }
             }
@@ -578,14 +565,15 @@ namespace SpellWork.Forms
 
             sb.AppendFormatIfNotNull(" SchoolMask {1} {0} &&", _tbSqlSchool.Text.ToInt32(), compare);
             sb.AppendFormatIfNotNull(" procFlags {1} {0} &&", _tbSqlProc.Text.ToInt32(), compare);
-            sb.AppendFormatIfNotNull(" procEx {1} {0}", _tbSqlProcEx.Text.ToInt32(), compare);
+            sb.AppendFormatIfNotNull(" HitMask {1} {0}", _tbSqlProcFlagsHit.Text.ToInt32(), compare);
 
             var subquery = sb.ToString() == "WHERE" ? string.Empty : sb.ToString();
 
             if (string.IsNullOrEmpty(subquery) && !string.IsNullOrEmpty(_tbSqlManual.Text))
                 subquery = "WHERE " + _tbSqlManual.Text;
 
-            var query = $"SELECT * FROM `spell_proc_event` {subquery} ORDER BY entry";
+            var query = "SELECT SpellId, SchoolMask, SpellFamilyName, SpellFamilyMask0, SpellFamilyMask1, SpellFamilyMask2, SpellFamilyMask3, "
+                        + $"ProcFlags, SpellTypeMask, SpellPhaseMask, HitMask, AttributesMask, DisableEffectsMask, ProcsPerMinute, Chance, Cooldown, Charges FROM `spell_proc` {subquery} ORDER BY SpellId";
             try
             {
                 MySqlConnection.SelectProc(query);
@@ -602,20 +590,30 @@ namespace SpellWork.Forms
             // check bad spell and drop
             foreach (var str in MySqlConnection.Dropped)
                 _rtbSqlLog.AppendText(str);
+
+            if (MySqlConnection.Dropped.Count != 0)
+                _rtbSqlLog.AppendLine();
+
+            _rtbSqlLog.ColorizeCode();
         }
 
         private void WriteClick(object sender, EventArgs e)
         {
+            if (ProcInfo.SpellProc == null)
+                return;
+
             var spellFamilyFlags = _tvFamilyTree.GetMask();
             // spell comment
-            var comment = $"-- ({ProcInfo.SpellProc.ID}) {ProcInfo.SpellProc.NameAndSubname}";
+            var comment = $" -- {ProcInfo.SpellProc.NameAndSubname}";
             // drop query
-            var drop = $"DELETE FROM `spell_proc_event` WHERE `entry` IN ({ProcInfo.SpellProc.ID});";
+            var drop = $"DELETE FROM `spell_proc` WHERE `entry` IN ({ProcInfo.SpellProc.ID});";
             // insert query
-            var insert =
-                $"INSERT INTO `spell_proc_event` VALUES ({ProcInfo.SpellProc.ID}, 0x{_clbSchools.GetFlagsValue():X2}, 0x{_cbProcFitstSpellFamily.SelectedValue.ToUInt32():X2}, 0x{spellFamilyFlags[0]:X8}, 0x{spellFamilyFlags[1]:X8}, 0x{spellFamilyFlags[2]:X8}, 0x{spellFamilyFlags[3]:X8}, 0x{_clbProcFlags.GetFlagsValue():X8}, 0x{_clbProcFlagEx.GetFlagsValue():X8}, {_tbPPM.Text.Replace(',', '.')}, {_tbChance.Text.Replace(',', '.')}, {_tbCooldown.Text.Replace(',', '.')});";
+            var insert = "INSERT INTO `spell_proc` (`SpellId`,`SchoolMask`,`SpellFamilyName`,`SpellFamilyMask0`,`SpellFamilyMask1`,`SpellFamilyMask2`,`SpellFamilyMask3`,`ProcFlags`,`SpellTypeMask`,`SpellPhaseMask`,`HitMask`,`AttributesMask`,`DisableEffectsMask`,`ProcsPerMinute`,`Chance`,`Cooldown`,`Charges`) VALUES\r\n"
+                + $"({ProcInfo.SpellProc.ID},0x{_clbSchools.GetFlagsValue():X2},"
+                + $"{_cbProcFitstSpellFamily.SelectedValue.ToUInt32()},0x{spellFamilyFlags[0]:X8},0x{spellFamilyFlags[1]:X8},0x{spellFamilyFlags[2]:X8},0x{spellFamilyFlags[3]:X8},"
+                + $"0x{_clbProcFlags.GetFlagsValue():X},0x0,0x0,0x{_clbProcFlagHit.GetFlagsValue():X},0x0,0x0,{_tbPPM.Text.Replace(',', '.')},{_tbChance.Text.Replace(',', '.')},{_tbCooldown.Text.Replace(',', '.')},0);";
 
-            _rtbSqlLog.AppendText(comment + "\r\n" + drop + "\r\n" + insert + "\r\n\r\n");
+            _rtbSqlLog.AppendText(drop + "\r\n" + insert + comment + "\r\n\r\n");
             _rtbSqlLog.ColorizeCode();
             if (MySqlConnection.Connected)
                 MySqlConnection.Insert(drop + insert);
@@ -626,20 +624,20 @@ namespace SpellWork.Forms
         private void ProcParse(object sender)
         {
             var proc = MySqlConnection.SpellProcEvent[((ListView)sender).SelectedIndices[0]];
-            var spell = DBC.DBC.SpellInfoStore[(int)proc.Id];
+            var spell = DBC.DBC.SpellInfoStore[Math.Abs(proc.SpellId)];
             ProcInfo.SpellProc = spell;
 
             spell.Write(_rtbProcSpellInfo);
 
-            _clbSchools.SetCheckedItemFromFlag(proc.SchoolMask);
-            _clbProcFlags.SetCheckedItemFromFlag(proc.ProcFlags);
-            _clbProcFlagEx.SetCheckedItemFromFlag(proc.ProcEx);
+            _clbSchools.SetCheckedItemFromFlag((uint)proc.SchoolMask);
+            _clbProcFlags.SetCheckedItemFromFlag((uint)proc.ProcFlags);
+            _clbProcFlagHit.SetCheckedItemFromFlag((uint)proc.HitMask);
 
             _cbProcSpellFamilyTree.SelectedValue = proc.SpellFamilyName;
             _cbProcFitstSpellFamily.SelectedValue = proc.SpellFamilyName;
 
-            _tbPPM.Text = proc.PpmRate.ToString(CultureInfo.InvariantCulture);
-            _tbChance.Text = proc.CustomChance.ToString(CultureInfo.InvariantCulture);
+            _tbPPM.Text = proc.ProcsPerMinute.ToString(CultureInfo.InvariantCulture);
+            _tbChance.Text = proc.Chance.ToString(CultureInfo.InvariantCulture);
             _tbCooldown.Text = proc.Cooldown.ToString();
 
             _tvFamilyTree.SetMask(proc.SpellFamilyMask);
@@ -652,7 +650,6 @@ namespace SpellWork.Forms
         #region VIRTUAL MODE
 
         private List<SpellInfo> _spellList = new List<SpellInfo>();
-        private List<SpellEffectInfo> _spellEffectList = new List<SpellEffectInfo>();
 
         private List<SpellInfo> _spellProcList = new List<SpellInfo>();
 

@@ -34,11 +34,8 @@
             this._ProcStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this._tsmFile = new System.Windows.Forms.ToolStripMenuItem();
-            this._Connected = new System.Windows.Forms.ToolStripMenuItem();
             this._tsmSettings = new System.Windows.Forms.ToolStripMenuItem();
             this._tsmExit = new System.Windows.Forms.ToolStripMenuItem();
-            this._tsmHelp = new System.Windows.Forms.ToolStripMenuItem();
-            this._tsmAbout = new System.Windows.Forms.ToolStripMenuItem();
             this._ilPro = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer7 = new System.Windows.Forms.SplitContainer();
             this.splitContainer8 = new System.Windows.Forms.SplitContainer();
@@ -97,7 +94,7 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this._clbProcFlags = new System.Windows.Forms.CheckedListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this._clbProcFlagEx = new System.Windows.Forms.CheckedListBox();
+            this._clbProcFlagHit = new System.Windows.Forms.CheckedListBox();
             this._gSpellProcEvent = new System.Windows.Forms.GroupBox();
             this._clbSchools = new System.Windows.Forms.CheckedListBox();
             this._cbProcFitstSpellFamily = new System.Windows.Forms.ComboBox();
@@ -125,7 +122,7 @@
             this._lvProcAdditionalInfo = new System.Windows.Forms.ListView();
             this._chID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this._chName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this._tpSqlData = new System.Windows.Forms.TabPage();
+            this._tpSpellProcDB = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this._cbBinaryCompare = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -135,10 +132,10 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this._bSqlProcEx = new System.Windows.Forms.Button();
+            this._bSqlProcFlagsHit = new System.Windows.Forms.Button();
             this._bSqlProc = new System.Windows.Forms.Button();
             this._bSqlSchool = new System.Windows.Forms.Button();
-            this._tbSqlProcEx = new System.Windows.Forms.TextBox();
+            this._tbSqlProcFlagsHit = new System.Windows.Forms.TextBox();
             this._tbSqlProc = new System.Windows.Forms.TextBox();
             this._tbSqlSchool = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -147,18 +144,24 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.splitContainer6 = new System.Windows.Forms.SplitContainer();
             this._lvDataList = new System.Windows.Forms.ListView();
-            this.entry = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.spellId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.spellname = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.schoolmask = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.spellfamilyname = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.spellfamilymask0 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.spellfamilymask1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.spellfamilymask2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.spellfamilymask3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.procflag = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.procEx = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.procSpellTypeMask = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.procSpellPhaseMask = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.procHitMask = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.procAttributesMask = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.procDisableEffectsMask = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ppmRate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.customchance = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cooldown = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.procCharges = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this._rtbSqlLog = new System.Windows.Forms.RichTextBox();
             this._bSqlToBase = new System.Windows.Forms.Button();
             this._bSqlSave = new System.Windows.Forms.Button();
@@ -209,7 +212,7 @@
             this.splitContainer5.Panel1.SuspendLayout();
             this.splitContainer5.Panel2.SuspendLayout();
             this.splitContainer5.SuspendLayout();
-            this._tpSqlData.SuspendLayout();
+            this._tpSpellProcDB.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer6)).BeginInit();
@@ -248,8 +251,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._tsmFile,
-            this._tsmHelp});
+            this._tsmFile});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(872, 24);
@@ -259,25 +261,17 @@
             // _tsmFile
             // 
             this._tsmFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._Connected,
             this._tsmSettings,
             this._tsmExit});
             this._tsmFile.Name = "_tsmFile";
             this._tsmFile.Size = new System.Drawing.Size(37, 20);
             this._tsmFile.Text = "File";
             // 
-            // _Connected
-            // 
-            this._Connected.Name = "_Connected";
-            this._Connected.Size = new System.Drawing.Size(132, 22);
-            this._Connected.Text = "Connected";
-            this._Connected.Click += new System.EventHandler(this.ConnectedClick);
-            // 
             // _tsmSettings
             // 
             this._tsmSettings.Name = "_tsmSettings";
-            this._tsmSettings.Size = new System.Drawing.Size(132, 22);
-            this._tsmSettings.Text = "Setting";
+            this._tsmSettings.Size = new System.Drawing.Size(180, 22);
+            this._tsmSettings.Text = "Settings";
             this._tsmSettings.Click += new System.EventHandler(this.SettingsClick);
             // 
             // _tsmExit
@@ -286,20 +280,6 @@
             this._tsmExit.Size = new System.Drawing.Size(132, 22);
             this._tsmExit.Text = "Exit";
             this._tsmExit.Click += new System.EventHandler(this.ExitClick);
-            // 
-            // _tsmHelp
-            // 
-            this._tsmHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._tsmAbout});
-            this._tsmHelp.Name = "_tsmHelp";
-            this._tsmHelp.Size = new System.Drawing.Size(44, 20);
-            this._tsmHelp.Text = "Help";
-            // 
-            // _tsmAbout
-            // 
-            this._tsmAbout.Name = "_tsmAbout";
-            this._tsmAbout.Size = new System.Drawing.Size(113, 22);
-            this._tsmAbout.Text = "About..";
             // 
             // _ilPro
             // 
@@ -575,9 +555,9 @@
             // 
             this.chSpellName.Text = "Name";
             this.chSpellName.Width = 250;
-            //
+            // 
             // chMiscID
-            //
+            // 
             this.chMiscID.Text = "MiscID";
             this.chMiscID.Width = 64;
             // 
@@ -920,8 +900,8 @@
             // 
             this.tabControl1.Controls.Add(this._tpSpellInfo);
             this.tabControl1.Controls.Add(this._tpSpellProcInfo);
+            this.tabControl1.Controls.Add(this._tpSpellProcDB);
             this.tabControl1.Controls.Add(this._tpCompare);
-            this.tabControl1.Controls.Add(this._tpSqlData);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
@@ -937,7 +917,7 @@
             this._tpSpellProcInfo.Name = "_tpSpellProcInfo";
             this._tpSpellProcInfo.Size = new System.Drawing.Size(864, 557);
             this._tpSpellProcInfo.TabIndex = 2;
-            this._tpSpellProcInfo.Text = "Spell Proc Event";
+            this._tpSpellProcInfo.Text = "Spell Proc";
             this._tpSpellProcInfo.UseVisualStyleBackColor = true;
             // 
             // splitContainer2
@@ -1013,26 +993,26 @@
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.groupBox4.Controls.Add(this._clbProcFlagEx);
+            this.groupBox4.Controls.Add(this._clbProcFlagHit);
             this.groupBox4.Location = new System.Drawing.Point(3, 60);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(858, 75);
             this.groupBox4.TabIndex = 9;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Spell Proc Ex";
+            this.groupBox4.Text = "Proc Hit Mask";
             // 
-            // _clbProcFlagEx
+            // _clbProcFlagHit
             // 
-            this._clbProcFlagEx.CheckOnClick = true;
-            this._clbProcFlagEx.ColumnWidth = 120;
-            this._clbProcFlagEx.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._clbProcFlagEx.FormattingEnabled = true;
-            this._clbProcFlagEx.Location = new System.Drawing.Point(3, 16);
-            this._clbProcFlagEx.MultiColumn = true;
-            this._clbProcFlagEx.Name = "_clbProcFlagEx";
-            this._clbProcFlagEx.Size = new System.Drawing.Size(852, 56);
-            this._clbProcFlagEx.TabIndex = 3;
-            this._clbProcFlagEx.SelectedIndexChanged += new System.EventHandler(this.ClbSchoolsSelectedIndexChanged);
+            this._clbProcFlagHit.CheckOnClick = true;
+            this._clbProcFlagHit.ColumnWidth = 120;
+            this._clbProcFlagHit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._clbProcFlagHit.FormattingEnabled = true;
+            this._clbProcFlagHit.Location = new System.Drawing.Point(3, 16);
+            this._clbProcFlagHit.MultiColumn = true;
+            this._clbProcFlagHit.Name = "_clbProcFlagHit";
+            this._clbProcFlagHit.Size = new System.Drawing.Size(852, 56);
+            this._clbProcFlagHit.TabIndex = 3;
+            this._clbProcFlagHit.SelectedIndexChanged += new System.EventHandler(this.ClbSchoolsSelectedIndexChanged);
             // 
             // _gSpellProcEvent
             // 
@@ -1358,6 +1338,7 @@
             this._lvProcAdditionalInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lvProcAdditionalInfo.FullRowSelect = true;
             this._lvProcAdditionalInfo.GridLines = true;
+            this._lvProcAdditionalInfo.HideSelection = false;
             this._lvProcAdditionalInfo.Location = new System.Drawing.Point(0, 0);
             this._lvProcAdditionalInfo.Name = "_lvProcAdditionalInfo";
             this._lvProcAdditionalInfo.Size = new System.Drawing.Size(864, 64);
@@ -1377,16 +1358,16 @@
             this._chName.Text = "Name";
             this._chName.Width = 685;
             // 
-            // _tpSqlData
+            // _tpSpellProcDB
             // 
-            this._tpSqlData.Controls.Add(this.groupBox3);
-            this._tpSqlData.Controls.Add(this.groupBox2);
-            this._tpSqlData.Location = new System.Drawing.Point(4, 22);
-            this._tpSqlData.Name = "_tpSqlData";
-            this._tpSqlData.Size = new System.Drawing.Size(864, 557);
-            this._tpSqlData.TabIndex = 3;
-            this._tpSqlData.Text = "Sql Data";
-            this._tpSqlData.UseVisualStyleBackColor = true;
+            this._tpSpellProcDB.Controls.Add(this.groupBox3);
+            this._tpSpellProcDB.Controls.Add(this.groupBox2);
+            this._tpSpellProcDB.Location = new System.Drawing.Point(4, 22);
+            this._tpSpellProcDB.Name = "_tpSpellProcDB";
+            this._tpSpellProcDB.Size = new System.Drawing.Size(864, 557);
+            this._tpSpellProcDB.TabIndex = 3;
+            this._tpSpellProcDB.Text = "Load Spell Proc from DB";
+            this._tpSpellProcDB.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
@@ -1401,10 +1382,10 @@
             this.groupBox3.Controls.Add(this.label11);
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.label7);
-            this.groupBox3.Controls.Add(this._bSqlProcEx);
+            this.groupBox3.Controls.Add(this._bSqlProcFlagsHit);
             this.groupBox3.Controls.Add(this._bSqlProc);
             this.groupBox3.Controls.Add(this._bSqlSchool);
-            this.groupBox3.Controls.Add(this._tbSqlProcEx);
+            this.groupBox3.Controls.Add(this._tbSqlProcFlagsHit);
             this.groupBox3.Controls.Add(this._tbSqlProc);
             this.groupBox3.Controls.Add(this._tbSqlSchool);
             this.groupBox3.Controls.Add(this.textBox1);
@@ -1487,15 +1468,15 @@
             this.label7.TabIndex = 5;
             this.label7.Text = "Spell ID:";
             // 
-            // _bSqlProcEx
+            // _bSqlProcFlagsHit
             // 
-            this._bSqlProcEx.Location = new System.Drawing.Point(718, 51);
-            this._bSqlProcEx.Name = "_bSqlProcEx";
-            this._bSqlProcEx.Size = new System.Drawing.Size(28, 23);
-            this._bSqlProcEx.TabIndex = 4;
-            this._bSqlProcEx.Text = "...";
-            this._bSqlProcEx.UseVisualStyleBackColor = true;
-            this._bSqlProcEx.Click += new System.EventHandler(this.CalcProcFlagsClick);
+            this._bSqlProcFlagsHit.Location = new System.Drawing.Point(718, 51);
+            this._bSqlProcFlagsHit.Name = "_bSqlProcFlagsHit";
+            this._bSqlProcFlagsHit.Size = new System.Drawing.Size(28, 23);
+            this._bSqlProcFlagsHit.TabIndex = 4;
+            this._bSqlProcFlagsHit.Text = "...";
+            this._bSqlProcFlagsHit.UseVisualStyleBackColor = true;
+            this._bSqlProcFlagsHit.Click += new System.EventHandler(this.CalcProcFlagsClick);
             // 
             // _bSqlProc
             // 
@@ -1509,20 +1490,20 @@
             // 
             // _bSqlSchool
             // 
-            this._bSqlSchool.Location = new System.Drawing.Point(718, 15);
+            this._bSqlSchool.Location = new System.Drawing.Point(718, 16);
             this._bSqlSchool.Name = "_bSqlSchool";
-            this._bSqlSchool.Size = new System.Drawing.Size(28, 23);
+            this._bSqlSchool.Size = new System.Drawing.Size(28, 21);
             this._bSqlSchool.TabIndex = 4;
             this._bSqlSchool.Text = "...";
             this._bSqlSchool.UseVisualStyleBackColor = true;
             this._bSqlSchool.Click += new System.EventHandler(this.CalcProcFlagsClick);
             // 
-            // _tbSqlProcEx
+            // _tbSqlProcFlagsHit
             // 
-            this._tbSqlProcEx.Location = new System.Drawing.Point(620, 53);
-            this._tbSqlProcEx.Name = "_tbSqlProcEx";
-            this._tbSqlProcEx.Size = new System.Drawing.Size(92, 20);
-            this._tbSqlProcEx.TabIndex = 3;
+            this._tbSqlProcFlagsHit.Location = new System.Drawing.Point(620, 53);
+            this._tbSqlProcFlagsHit.Name = "_tbSqlProcFlagsHit";
+            this._tbSqlProcFlagsHit.Size = new System.Drawing.Size(92, 20);
+            this._tbSqlProcFlagsHit.TabIndex = 3;
             // 
             // _tbSqlProc
             // 
@@ -1551,7 +1532,7 @@
             this._cbSqlSpellFamily.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this._cbSqlSpellFamily.FormattingEnabled = true;
             this._cbSqlSpellFamily.IntegralHeight = false;
-            this._cbSqlSpellFamily.Location = new System.Drawing.Point(81, 17);
+            this._cbSqlSpellFamily.Location = new System.Drawing.Point(81, 16);
             this._cbSqlSpellFamily.Name = "_cbSqlSpellFamily";
             this._cbSqlSpellFamily.Size = new System.Drawing.Size(272, 21);
             this._cbSqlSpellFamily.TabIndex = 1;
@@ -1559,9 +1540,9 @@
             // _bSelect
             // 
             this._bSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._bSelect.Location = new System.Drawing.Point(1430, 10);
+            this._bSelect.Location = new System.Drawing.Point(775, 10);
             this._bSelect.Name = "_bSelect";
-            this._bSelect.Size = new System.Drawing.Size(75, 23);
+            this._bSelect.Size = new System.Drawing.Size(75, 21);
             this._bSelect.TabIndex = 0;
             this._bSelect.Text = "Select";
             this._bSelect.UseVisualStyleBackColor = true;
@@ -1603,18 +1584,24 @@
             // _lvDataList
             // 
             this._lvDataList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.entry,
+            this.spellId,
             this.spellname,
             this.schoolmask,
             this.spellfamilyname,
             this.spellfamilymask0,
             this.spellfamilymask1,
             this.spellfamilymask2,
+            this.spellfamilymask3,
             this.procflag,
-            this.procEx,
+            this.procSpellTypeMask,
+            this.procSpellPhaseMask,
+            this.procHitMask,
+            this.procAttributesMask,
+            this.procDisableEffectsMask,
             this.ppmRate,
             this.customchance,
-            this.cooldown});
+            this.cooldown,
+            this.procCharges});
             this._lvDataList.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lvDataList.FullRowSelect = true;
             this._lvDataList.GridLines = true;
@@ -1631,10 +1618,10 @@
             this._lvDataList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SqlDataListKeyDown);
             this._lvDataList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.SqlDataListMouseDoubleClick);
             // 
-            // entry
+            // spellId
             // 
-            this.entry.Text = "Entry";
-            this.entry.Width = 56;
+            this.spellId.Text = "Spell ID";
+            this.spellId.Width = 56;
             // 
             // spellname
             // 
@@ -1648,47 +1635,76 @@
             // 
             // spellfamilyname
             // 
-            this.spellfamilyname.Text = "Spell Family Name";
-            this.spellfamilyname.Width = 103;
+            this.spellfamilyname.Text = "Spell Family";
+            this.spellfamilyname.Width = 90;
             // 
             // spellfamilymask0
             // 
-            this.spellfamilymask0.Text = "Spell Family Mask 0";
-            this.spellfamilymask0.Width = 110;
+            this.spellfamilymask0.Text = "Family Mask 0";
+            this.spellfamilymask0.Width = 80;
             // 
             // spellfamilymask1
             // 
-            this.spellfamilymask1.Text = "Spell Family Mask 1";
-            this.spellfamilymask1.Width = 110;
+            this.spellfamilymask1.Text = "Family Mask 1";
+            this.spellfamilymask1.Width = 80;
             // 
             // spellfamilymask2
             // 
-            this.spellfamilymask2.Text = "Spell Family Mask 2";
-            this.spellfamilymask2.Width = 110;
+            this.spellfamilymask2.Text = "Family Mask 2";
+            this.spellfamilymask2.Width = 80;
+            // 
+            // spellfamilymask3
+            // 
+            this.spellfamilymask3.Text = "Family Mask 3";
+            this.spellfamilymask3.Width = 80;
             // 
             // procflag
             // 
             this.procflag.Text = "Proc Flags";
             this.procflag.Width = 80;
             // 
-            // procEx
+            // procSpellTypeMask
             // 
-            this.procEx.Text = "Proc Ex";
-            this.procEx.Width = 80;
+            this.procSpellTypeMask.Text = "Type Mask";
+            this.procSpellTypeMask.Width = 80;
+            // 
+            // procSpellPhaseMask
+            // 
+            this.procSpellPhaseMask.Text = "Phase";
+            this.procSpellPhaseMask.Width = 50;
+            // 
+            // procHitMask
+            // 
+            this.procHitMask.Text = "Hit Mask";
+            // 
+            // procAttributesMask
+            // 
+            this.procAttributesMask.Text = "Attributes";
+            this.procAttributesMask.Width = 140;
+            // 
+            // procDisableEffectsMask
+            // 
+            this.procDisableEffectsMask.Text = "Disabled Effects";
+            this.procDisableEffectsMask.Width = 80;
             // 
             // ppmRate
             // 
             this.ppmRate.Text = "PPM Rate";
-            this.ppmRate.Width = 67;
+            this.ppmRate.Width = 65;
             // 
             // customchance
             // 
-            this.customchance.Text = "Custom Chance";
-            this.customchance.Width = 93;
+            this.customchance.Text = "Chance";
+            this.customchance.Width = 55;
             // 
             // cooldown
             // 
-            this.cooldown.Text = "Colldown";
+            this.cooldown.Text = "Cooldown";
+            // 
+            // procCharges
+            // 
+            this.procCharges.Text = "Charges";
+            this.procCharges.Width = 55;
             // 
             // _rtbSqlLog
             // 
@@ -1829,7 +1845,7 @@
             this.splitContainer5.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).EndInit();
             this.splitContainer5.ResumeLayout(false);
-            this._tpSqlData.ResumeLayout(false);
+            this._tpSpellProcDB.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -1899,11 +1915,9 @@
         private System.Windows.Forms.TextBox _tbSearchIcon;
         private System.Windows.Forms.TextBox _tbSearchId;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.ToolStripMenuItem _tsmHelp;
-        private System.Windows.Forms.ToolStripMenuItem _tsmAbout;
         private System.Windows.Forms.TabPage _tpSpellProcInfo;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.TabPage _tpSqlData;
+        private System.Windows.Forms.TabPage _tpSpellProcDB;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ListView _lvProcAdditionalInfo;
@@ -1934,7 +1948,7 @@
         private System.Windows.Forms.ComboBox _cbProcFitstSpellFamily;
         private System.Windows.Forms.CheckedListBox _clbSchools;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.CheckedListBox _clbProcFlagEx;
+        private System.Windows.Forms.CheckedListBox _clbProcFlagHit;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.CheckedListBox _clbProcFlags;
         private System.Windows.Forms.SplitContainer splitContainer6;
@@ -1942,27 +1956,33 @@
         private System.Windows.Forms.Button _bSqlToBase;
         private System.Windows.Forms.RichTextBox _rtbSqlLog;
         private System.Windows.Forms.ListView _lvDataList;
-        private System.Windows.Forms.ColumnHeader entry;
+        private System.Windows.Forms.ColumnHeader spellId;
         private System.Windows.Forms.ColumnHeader spellname;
         private System.Windows.Forms.ColumnHeader schoolmask;
         private System.Windows.Forms.ColumnHeader spellfamilyname;
         private System.Windows.Forms.ColumnHeader spellfamilymask0;
         private System.Windows.Forms.ColumnHeader spellfamilymask1;
         private System.Windows.Forms.ColumnHeader spellfamilymask2;
+        private System.Windows.Forms.ColumnHeader spellfamilymask3;
         private System.Windows.Forms.ColumnHeader procflag;
-        private System.Windows.Forms.ColumnHeader procEx;
+        private System.Windows.Forms.ColumnHeader procSpellTypeMask;
+        private System.Windows.Forms.ColumnHeader procSpellPhaseMask;
+        private System.Windows.Forms.ColumnHeader procHitMask;
+        private System.Windows.Forms.ColumnHeader procAttributesMask;
+        private System.Windows.Forms.ColumnHeader procDisableEffectsMask;
         private System.Windows.Forms.ColumnHeader ppmRate;
         private System.Windows.Forms.ColumnHeader customchance;
         private System.Windows.Forms.ColumnHeader cooldown;
+        private System.Windows.Forms.ColumnHeader procCharges;
         private System.Windows.Forms.Button _bSelect;
         private System.Windows.Forms.ComboBox _cbSqlSpellFamily;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox _tbSqlSchool;
         private System.Windows.Forms.TextBox _tbSqlProc;
-        private System.Windows.Forms.TextBox _tbSqlProcEx;
+        private System.Windows.Forms.TextBox _tbSqlProcFlagsHit;
         private System.Windows.Forms.Button _bSqlSchool;
         private System.Windows.Forms.Button _bSqlProc;
-        private System.Windows.Forms.Button _bSqlProcEx;
+        private System.Windows.Forms.Button _bSqlProcFlagsHit;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
@@ -1974,7 +1994,6 @@
         private System.Windows.Forms.CheckBox _cbProcFlag;
         private System.Windows.Forms.Button _bWrite;
         private System.Windows.Forms.ToolStripMenuItem _tsmFile;
-        private System.Windows.Forms.ToolStripMenuItem _Connected;
         private System.Windows.Forms.ToolStripMenuItem _tsmSettings;
         private System.Windows.Forms.ToolStripMenuItem _tsmExit;
         private System.Windows.Forms.Button _bLevelScaling;

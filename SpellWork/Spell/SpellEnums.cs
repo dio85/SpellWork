@@ -1117,7 +1117,7 @@ namespace SpellWork.Spell
     };
 
     [Flags]
-    public enum ProcFlags2
+    public enum ProcFlags2 : uint
     {
         PROC_FLAG_2_TARGET_DIES                   = 0x00000001,    // 00 Target Dies
         PROC_FLAG_2_KNOCKBACK                     = 0x00000002,    // 01 Target Dies
@@ -1125,28 +1125,57 @@ namespace SpellWork.Spell
     }
 
     [Flags]
-    public enum ProcFlagsEx
+    public enum ProcFlagsSpellType : uint
     {
-        // If none can tigger on Hit/Crit only (passive spells MUST defined by SpellFamily flag)
-        PROC_EX_NORMAL_HIT              = 0x0000001,                 // If set only from normal hit (only damage spells)
-        PROC_EX_CRITICAL_HIT            = 0x0000002,
-        PROC_EX_MISS                    = 0x0000004,
-        PROC_EX_RESIST                  = 0x0000008,
-        PROC_EX_DODGE                   = 0x0000010,
-        PROC_EX_PARRY                   = 0x0000020,
-        PROC_EX_BLOCK                   = 0x0000040,
-        PROC_EX_EVADE                   = 0x0000080,
-        PROC_EX_IMMUNE                  = 0x0000100,
-        PROC_EX_DEFLECT                 = 0x0000200,
-        PROC_EX_ABSORB                  = 0x0000400,
-        PROC_EX_REFLECT                 = 0x0000800,
-        PROC_EX_INTERRUPT               = 0x0001000,                 // Melee hit result can be Interrupt (not used)
-        PROC_EX_FULL_BLOCK              = 0x0002000,                 // block al attack damage
-        PROC_EX_RESERVED2               = 0x0004000,
-        PROC_EX_NOT_ACTIVE_SPELL        = 0x0008000,                 // Spell mustn't do damage/heal to proc
-        PROC_EX_EX_TRIGGER_ALWAYS       = 0x0010000,                 // If set trigger always no matter of hit result
-        PROC_EX_EX_ONE_TIME_TRIGGER     = 0x0020000,                 // If set trigger always but only one time (not implemented yet)
-        PROC_EX_ONLY_ACTIVE_SPELL       = 0x0040000,                 // Spell has to do damage/heal to proc
+        PROC_SPELL_TYPE_NONE              = 0x0000000,
+        PROC_SPELL_TYPE_DAMAGE            = 0x0000001, // damage type of spell
+        PROC_SPELL_TYPE_HEAL              = 0x0000002, // heal type of spell
+        PROC_SPELL_TYPE_NO_DMG_HEAL       = 0x0000004, // other spells
+        PROC_SPELL_TYPE_MASK_ALL          = PROC_SPELL_TYPE_DAMAGE | PROC_SPELL_TYPE_HEAL | PROC_SPELL_TYPE_NO_DMG_HEAL
+    };
+
+    [Flags]
+    public enum ProcFlagsSpellPhase : uint
+    {
+        PROC_SPELL_PHASE_NONE             = 0x0000000,
+        PROC_SPELL_PHASE_CAST             = 0x0000001,
+        PROC_SPELL_PHASE_HIT              = 0x0000002,
+        PROC_SPELL_PHASE_FINISH           = 0x0000004,
+        PROC_SPELL_PHASE_MASK_ALL         = PROC_SPELL_PHASE_CAST | PROC_SPELL_PHASE_HIT | PROC_SPELL_PHASE_FINISH
+    };
+
+    [Flags]
+    public enum ProcFlagsHit : uint
+    {
+        PROC_HIT_NONE                = 0x0000000, // no value - PROC_HIT_NORMAL | PROC_HIT_CRITICAL for TAKEN proc type, PROC_HIT_NORMAL | PROC_HIT_CRITICAL | PROC_HIT_ABSORB for DONE
+        PROC_HIT_NORMAL              = 0x0000001, // non-critical hits
+        PROC_HIT_CRITICAL            = 0x0000002,
+        PROC_HIT_MISS                = 0x0000004,
+        PROC_HIT_FULL_RESIST         = 0x0000008,
+        PROC_HIT_DODGE               = 0x0000010,
+        PROC_HIT_PARRY               = 0x0000020,
+        PROC_HIT_BLOCK               = 0x0000040, // partial or full block
+        PROC_HIT_EVADE               = 0x0000080,
+        PROC_HIT_IMMUNE              = 0x0000100,
+        PROC_HIT_DEFLECT             = 0x0000200,
+        PROC_HIT_ABSORB              = 0x0000400, // partial or full absorb
+        PROC_HIT_REFLECT             = 0x0000800,
+        PROC_HIT_INTERRUPT           = 0x0001000,
+        PROC_HIT_FULL_BLOCK          = 0x0002000,
+        PROC_HIT_MASK_ALL            = 0x0003FFF
+    };
+
+    [Flags]
+    public enum ProcAttributes : uint
+    {
+        PROC_ATTR_REQ_EXP_OR_HONOR          = 0x0000001, // requires proc target to give exp or honor for aura proc
+        PROC_ATTR_TRIGGERED_CAN_PROC        = 0x0000002, // aura can proc even with triggered spells
+        PROC_ATTR_REQ_POWER_COST            = 0x0000004, // requires triggering spell to have a power cost for aura proc
+        PROC_ATTR_REQ_SPELLMOD              = 0x0000008, // requires triggering spell to be affected by proccing aura to drop charges
+        PROC_ATTR_USE_STACKS_FOR_CHARGES    = 0x0000010, // consuming proc drops a stack from proccing aura instead of charge
+
+
+        PROC_ATTR_REDUCE_PROC_60            = 0x0000080  // aura should have a reduced chance to proc if level of proc Actor > 60
     };
 
     public enum SpellSchools
@@ -1161,7 +1190,7 @@ namespace SpellWork.Spell
     };
 
     [Flags]
-    public enum SpellSchoolMask
+    public enum SpellSchoolMask : byte
     {
         SPELL_SCHOOL_MASK_NONE    = 0x00,                       // not exist
         SPELL_SCHOOL_MASK_NORMAL  = (1 << SpellSchools.NORMAL), // PHYSICAL (Armor)
