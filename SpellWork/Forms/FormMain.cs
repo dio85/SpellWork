@@ -122,7 +122,7 @@ namespace SpellWork.Forms
             {
                 _dbConnect.Text = @"Connection successful.";
                 _dbConnect.ForeColor = Color.Green;
-                //MySqlConnection.AddDBItems();
+                MySqlConnection.LoadServersideSpells();
             }
             else
             {
