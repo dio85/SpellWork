@@ -402,15 +402,6 @@ namespace SpellWork.Forms
         private void SetProcAttribute(SpellInfo spell)
         {
             spell.Write(_rtbProcSpellInfo);
-
-            _cbProcSpellFamilyTree.SelectedValue = spell.SpellFamilyName;
-            _clbProcFlags.SetCheckedItemFromFlag(spell.ProcFlags);
-            _clbSchools.SetCheckedItemFromFlag(spell.SchoolMask);
-            _cbProcFitstSpellFamily.SelectedValue = spell.SpellFamilyName;
-            _tbPPM.Text = spell.BaseProcRate.ToString(CultureInfo.InvariantCulture);
-            _tbChance.Text = spell.ProcChance.ToString();
-            _tbCooldown.Text = spell.ProcCooldown.ToString(CultureInfo.InvariantCulture);
-            _tbProcCharges.Text = spell.ProcCharges.ToString();
         }
 
         private void GetProcAttribute(SpellInfo spell)
