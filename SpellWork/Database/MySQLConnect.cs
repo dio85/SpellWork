@@ -342,7 +342,8 @@ namespace SpellWork.Database
                                 {
                                     reader.GetInt16(32),
                                     reader.GetInt16(33)
-                                }
+                                },
+                                SpellID = (int)spellId
                             };
 
                             spellInfo.Effects.Add(effect);
