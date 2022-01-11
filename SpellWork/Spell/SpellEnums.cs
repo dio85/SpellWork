@@ -1133,7 +1133,6 @@ namespace SpellWork.Spell
         PROC_SPELL_TYPE_DAMAGE            = 0x0000001, // damage type of spell
         PROC_SPELL_TYPE_HEAL              = 0x0000002, // heal type of spell
         PROC_SPELL_TYPE_NO_DMG_HEAL       = 0x0000004, // other spells
-        PROC_SPELL_TYPE_MASK_ALL          = PROC_SPELL_TYPE_DAMAGE | PROC_SPELL_TYPE_HEAL | PROC_SPELL_TYPE_NO_DMG_HEAL
     };
 
     [Flags]
@@ -1143,7 +1142,6 @@ namespace SpellWork.Spell
         PROC_SPELL_PHASE_CAST             = 0x0000001,
         PROC_SPELL_PHASE_HIT              = 0x0000002,
         PROC_SPELL_PHASE_FINISH           = 0x0000004,
-        PROC_SPELL_PHASE_MASK_ALL         = PROC_SPELL_PHASE_CAST | PROC_SPELL_PHASE_HIT | PROC_SPELL_PHASE_FINISH
     };
 
     [Flags]
@@ -1164,7 +1162,6 @@ namespace SpellWork.Spell
         PROC_HIT_REFLECT             = 0x0000800,
         PROC_HIT_INTERRUPT           = 0x0001000,
         PROC_HIT_FULL_BLOCK          = 0x0002000,
-        PROC_HIT_MASK_ALL            = 0x0003FFF
     };
 
     [Flags]

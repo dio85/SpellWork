@@ -135,6 +135,7 @@
     <Compile Include="DBC\Structures\SpellTargetRestrictionsEntry.cs" />
     <Compile Include="DBC\Structures\SpellTotemsEntry.cs" />
     <Compile Include="DBC\Structures\SpellXSpellVisualEntry.cs" />
+    <Compile Include="Extensions\CheckedListBoxExtensions.cs" />
     <Compile Include="Extensions\TreeViewExtensions.cs" />
     <Compile Include="DBC\DBC.cs" />
     <Compile Include="Filtering\FilterFactory.cs" />
