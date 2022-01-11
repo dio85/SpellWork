@@ -657,7 +657,7 @@ namespace SpellWork.Forms
             var comment = $" -- {ProcInfo.SpellProc.NameAndSubname}";
 
             // drop query
-            var drop = $"DELETE FROM `spell_proc` WHERE `entry` IN ({ProcInfo.SpellProc.ID});";
+            var drop = $"DELETE FROM `spell_proc` WHERE `SpellId` IN ({ProcInfo.SpellProc.ID});";
 
             // insert query
             var procFlags = _clbProcFlags.GetFlagsValue() != ProcInfo.SpellProc.ProcFlags ? _clbProcFlags.GetFlagsValue() : 0;
