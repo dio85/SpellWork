@@ -49,6 +49,7 @@ namespace SpellWork.Forms
                 SpellSchoolMask.SPELL_SCHOOL_MASK_ARCANE
             }, "SPELL_SCHOOL_MASK_");
             _clbProcFlags.SetFlags<ProcFlags>("PROC_FLAG_");
+            _clbProcFlags.AddFlags<ProcFlags2>("PROC_FLAG_2_", 1);
             _clbSpellTypeMask.SetFlags(new[]
             {
                 ProcFlagsSpellType.PROC_SPELL_TYPE_DAMAGE,
@@ -660,16 +661,17 @@ namespace SpellWork.Forms
             var drop = $"DELETE FROM `spell_proc` WHERE `SpellId` IN ({ProcInfo.SpellProc.ID});";
 
             // insert query
-            var procFlags = _clbProcFlags.GetFlagsValue() != ProcInfo.SpellProc.ProcFlags ? _clbProcFlags.GetFlagsValue() : 0;
+            var procFlags = _clbProcFlags.GetFlagsValue(0) != ProcInfo.SpellProc.ProcFlags ? _clbProcFlags.GetFlagsValue(0) : 0;
+            var procFlags2 = _clbProcFlags.GetFlagsValue(1) != ProcInfo.SpellProc.ProcFlagsEx ? _clbProcFlags.GetFlagsValue(1) : 0;
             var procPPM = _tbPPM.Text.Replace(',', '.') != ProcInfo.SpellProc.BaseProcRate.ToString(CultureInfo.InvariantCulture) ? _tbPPM.Text.Replace(',', '.') : "0";
             var procChance = _tbChance.Text.Replace(',', '.') != ProcInfo.SpellProc.ProcChance.ToString() ? _tbChance.Text.Replace(',', '.') : "0";
             var procCooldown = _tbCooldown.Text.ToUInt32() != ProcInfo.SpellProc.ProcCooldown ? _tbCooldown.Text.ToUInt32() : 0;
             var procCharges = _tbProcCharges.Text.ToInt32() != ProcInfo.SpellProc.ProcCharges ? _tbProcCharges.Text.ToInt32() : 0;
 
-            var insert = "INSERT INTO `spell_proc` (`SpellId`,`SchoolMask`,`SpellFamilyName`,`SpellFamilyMask0`,`SpellFamilyMask1`,`SpellFamilyMask2`,`SpellFamilyMask3`,`ProcFlags`,`SpellTypeMask`,`SpellPhaseMask`,`HitMask`,`AttributesMask`,`DisableEffectsMask`,`ProcsPerMinute`,`Chance`,`Cooldown`,`Charges`) VALUES\r\n"
+            var insert = "INSERT INTO `spell_proc` (`SpellId`,`SchoolMask`,`SpellFamilyName`,`SpellFamilyMask0`,`SpellFamilyMask1`,`SpellFamilyMask2`,`SpellFamilyMask3`,`ProcFlags`,`ProcFlags2`,`SpellTypeMask`,`SpellPhaseMask`,`HitMask`,`AttributesMask`,`DisableEffectsMask`,`ProcsPerMinute`,`Chance`,`Cooldown`,`Charges`) VALUES\r\n"
                 + $"({ProcInfo.SpellProc.ID},0x{_clbSchools.GetFlagsValue():X2},"
                 + $"{_cbProcFitstSpellFamily.SelectedValue.ToUInt32()},0x{spellFamilyFlags[0]:X8},0x{spellFamilyFlags[1]:X8},0x{spellFamilyFlags[2]:X8},0x{spellFamilyFlags[3]:X8},"
-                + $"0x{procFlags:X},0x{_clbSpellTypeMask.GetFlagsValue():X},0x{_clbSpellPhaseMask.GetFlagsValue():X},0x{_clbProcFlagHit.GetFlagsValue():X},0x{_clbProcAttributes.GetFlagsValue():X},0x0,{procPPM},{procChance},{procCooldown},{procCharges});";
+                + $"0x{procFlags:X},0x{procFlags2:X},0x{_clbSpellTypeMask.GetFlagsValue():X},0x{_clbSpellPhaseMask.GetFlagsValue():X},0x{_clbProcFlagHit.GetFlagsValue():X},0x{_clbProcAttributes.GetFlagsValue():X},0x0,{procPPM},{procChance},{procCooldown},{procCharges});";
 
             _rtbSqlLog.AppendText(drop + "\r\n" + insert + comment + "\r\n\r\n");
             _rtbSqlLog.ColorizeCode();
@@ -694,7 +696,8 @@ namespace SpellWork.Forms
             _tbNewProcSpellId.Text = proc.SpellId.ToString();
 
             _clbSchools.SetCheckedItemFromFlag((uint)proc.SchoolMask);
-            _clbProcFlags.SetCheckedItemFromFlag((uint)proc.ProcFlags);
+            _clbProcFlags.SetCheckedItemFromFlag((uint)proc.ProcFlags, 0);
+            _clbProcFlags.SetCheckedItemFromFlag((uint)proc.ProcFlags2, 1);
             _clbSpellTypeMask.SetCheckedItemFromFlag((uint)proc.SpellTypeMask);
             _clbSpellPhaseMask.SetCheckedItemFromFlag((uint)proc.SpellPhaseMask);
             _clbProcFlagHit.SetCheckedItemFromFlag((uint)proc.HitMask);

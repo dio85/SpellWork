@@ -11,6 +11,7 @@ namespace SpellWork.Database
         public SpellFamilyNames SpellFamilyName;    // if nonzero - for matching proc condition based on candidate spell's SpellFamilyName
         public uint[] SpellFamilyMask;              // if nonzero - bitmask for matching proc condition based on candidate spell's SpellFamilyFlags
         public ProcFlags ProcFlags;                 // if nonzero - owerwrite procFlags field for given Spell.dbc entry, bitmask for matching proc condition
+        public ProcFlags2 ProcFlags2;               // if nonzero - owerwrite procFlags field for given Spell.dbc entry, bitmask for matching proc condition
         public ProcFlagsSpellType SpellTypeMask;    // if nonzero - bitmask for matching proc condition based on candidate spell's damage/heal effects
         public ProcFlagsSpellPhase SpellPhaseMask;  // if nonzero - bitmask for matching phase of a spellcast on which proc occurs
         public ProcFlagsHit HitMask;                // if nonzero - bitmask for matching proc condition based on hit result
@@ -34,6 +35,7 @@ namespace SpellWork.Database
                 $"0x{SpellFamilyMask[2]:X8}",
                 $"0x{SpellFamilyMask[3]:X8}",
                 ProcFlags.ToString().Replace("PROC_FLAG_", ""),
+                ProcFlags2.ToString().Replace("PROC_FLAG_2_", ""),
                 SpellTypeMask.ToString().Replace("PROC_SPELL_TYPE_", ""),
                 SpellPhaseMask.ToString().Replace("PROC_SPELL_PHASE_", ""),
                 HitMask.ToString().Replace("PROC_HIT_", ""),

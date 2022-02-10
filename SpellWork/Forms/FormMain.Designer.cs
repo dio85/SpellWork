@@ -168,6 +168,7 @@
             this.spellfamilymask2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.spellfamilymask3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.procflag = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.procFlags2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.procSpellTypeMask = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.procSpellPhaseMask = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.procHitMask = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -1771,6 +1772,7 @@
             this.spellfamilymask2,
             this.spellfamilymask3,
             this.procflag,
+            this.procFlags2,
             this.procSpellTypeMask,
             this.procSpellPhaseMask,
             this.procHitMask,
@@ -1840,6 +1842,11 @@
             // 
             this.procflag.Text = "Proc Flags";
             this.procflag.Width = 80;
+            // 
+            // procFlags2
+            // 
+            this.procFlags2.Text = "Proc Flags 2";
+            this.procFlags2.Width = 80;
             // 
             // procSpellTypeMask
             // 
@@ -2149,6 +2156,7 @@
         private System.Windows.Forms.ColumnHeader spellfamilymask2;
         private System.Windows.Forms.ColumnHeader spellfamilymask3;
         private System.Windows.Forms.ColumnHeader procflag;
+        private System.Windows.Forms.ColumnHeader procFlags2;
         private System.Windows.Forms.ColumnHeader procSpellTypeMask;
         private System.Windows.Forms.ColumnHeader procSpellPhaseMask;
         private System.Windows.Forms.ColumnHeader procHitMask;

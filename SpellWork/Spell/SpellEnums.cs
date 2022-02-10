@@ -1062,8 +1062,6 @@ namespace SpellWork.Spell
     [Flags]
     public enum ProcFlags : uint
     {
-        PROC_FLAG_NONE                            = 0x00000000,
-
         PROC_FLAG_HEARTBEAT                       = 0x00000001,    // 00 Heartbeat
         PROC_FLAG_KILL                            = 0x00000002,    // 01 Kill target (in most cases need XP/Honor reward)
 
