@@ -10,9 +10,6 @@ namespace SpellWork.Database
 {
     public static class MySqlConnection
     {
-        private static MySql.Data.MySqlClient.MySqlConnection _conn;
-        private static MySqlCommand _command;
-
         public static bool Connected { get; private set; }
         public static List<string> Dropped = new List<string>();
         public static List<SpellProcEntry> SpellProcEvent = new List<SpellProcEntry>();
@@ -41,7 +38,7 @@ namespace SpellWork.Database
 
         public static void LoadSpellsDBCFromDB()
         {
-            using (_conn = new MySql.Data.MySqlClient.MySqlConnection(ConnectionString))
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(ConnectionString))
             {
                 string query = @"SELECT Id,Dispel,Mechanic,Attributes,AttributesEx,AttributesEx2,AttributesEx3,AttributesEx4,AttributesEx5,AttributesEx6,AttributesEx7,Stances,StancesNot,Targets,CastingTimeIndex,AuraInterruptFlags,ProcFlags,ProcChance,ProcCharges,MaxLevel,
                     BaseLevel,SpellLevel,DurationIndex,RangeIndex,StackAmount,EquippedItemClass,EquippedItemSubClassMask,EquippedItemInventoryTypeMask,Effect1,Effect2,Effect3,EffectDieSides1,EffectDieSides2,EffectDieSides3,EffectRealPointsPerLevel1,
@@ -53,10 +50,10 @@ namespace SpellWork.Database
                     AreaGroupId,SchoolMask,SpellName FROM `spell_dbc` ORDER BY Id ASC;";
                 DBC.DBC.SpellStringsFromDB.Clear();
 
-                _command = new MySqlCommand(query, _conn);
-                _conn.Open();
+                var command = new MySqlCommand(query, conn);
+                conn.Open();
 
-                using (var reader = _command.ExecuteReader())
+                using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -296,11 +293,17 @@ namespace SpellWork.Database
 
         public static void Insert(string query)
         {
-            _conn    = new MySql.Data.MySqlClient.MySqlConnection(ConnectionString);
-            _command = new MySqlCommand(query, _conn);
-            _conn.Open();
-            _command.ExecuteNonQuery();
-            _command.Connection.Close();
+            if (!Connected || Settings.Default.DbIsReadOnly)
+                return;
+
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(ConnectionString))
+            {
+                conn.Open();
+                using (var command = new MySqlCommand(query, conn))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
         public static List<Item> SelectItems()
@@ -328,12 +331,12 @@ namespace SpellWork.Database
                     (t.spellid_1 > 0 || t.spellid_2 > 0 || t.spellid_3 > 0 || t.spellid_4 > 0 || t.spellid_5 > 0);",
                 Enum.GetName(typeof(Spell.LocalesDBC), DBC.DBC.Locale));
 
-            using (_conn = new MySql.Data.MySqlClient.MySqlConnection(ConnectionString))
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(ConnectionString))
             {
-                _command = new MySqlCommand(query, _conn);
-                _conn.Open();
+                var command = new MySqlCommand(query, conn);
+                conn.Open();
 
-                using (var reader = _command.ExecuteReader())
+                using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -355,7 +358,7 @@ namespace SpellWork.Database
                         });
                     }
                 }
-             }
+            }
             return items;
         }
 
@@ -369,14 +372,16 @@ namespace SpellWork.Database
 
             try
             {
-                _conn = new MySql.Data.MySqlClient.MySqlConnection(ConnectionString);
-                _conn.Open();
-                _conn.Close();
+                using (var conn = new MySql.Data.MySqlClient.MySqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    conn.Close();
+                }
                 Connected = true;
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show(string.Format("Errno {0}{1}{2}", ex.Number, Environment.NewLine, ex.Message));
+                MessageBox.Show($"Errno {ex.Number}{Environment.NewLine}{ex.Message}");
                 Connected = false;
             }
             catch

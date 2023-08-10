@@ -46,12 +46,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this._bSaveSettings = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this._cbReadOnlyDB = new System.Windows.Forms.CheckBox();
             this._gbDbSetting.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // _gbDbSetting
-            // 
+            //
             this._gbDbSetting.Controls.Add(this._tbBase);
             this._gbDbSetting.Controls.Add(this.label5);
             this._gbDbSetting.Controls.Add(this._tbPass);
@@ -64,103 +64,123 @@
             this._gbDbSetting.Controls.Add(this.label1);
             this._gbDbSetting.Location = new System.Drawing.Point(12, 12);
             this._gbDbSetting.Name = "_gbDbSetting";
-            this._gbDbSetting.Size = new System.Drawing.Size(217, 149);
+            this._gbDbSetting.Size = new System.Drawing.Size(263, 149);
             this._gbDbSetting.TabIndex = 0;
             this._gbDbSetting.TabStop = false;
-            this._gbDbSetting.Text = "Date Base Connect Settings";
-            // 
+            this._gbDbSetting.Text = "Database Connection";
+            //
             // _tbBase
-            // 
-            this._tbBase.Location = new System.Drawing.Point(54, 126);
+            //
+            this._tbBase.Location = new System.Drawing.Point(65, 126);
             this._tbBase.Name = "_tbBase";
-            this._tbBase.Size = new System.Drawing.Size(152, 20);
+            this._tbBase.Size = new System.Drawing.Size(192, 20);
             this._tbBase.TabIndex = 4;
-            // 
+            //
             // label5
-            // 
+            //
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 129);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(31, 13);
             this.label5.TabIndex = 0;
             this.label5.Text = "Base";
-            // 
+            //
             // _tbPass
-            // 
-            this._tbPass.Location = new System.Drawing.Point(54, 100);
+            //
+            this._tbPass.Location = new System.Drawing.Point(65, 100);
             this._tbPass.Name = "_tbPass";
-            this._tbPass.Size = new System.Drawing.Size(152, 20);
+            this._tbPass.Size = new System.Drawing.Size(192, 20);
             this._tbPass.TabIndex = 3;
             this._tbPass.UseSystemPasswordChar = true;
-            // 
+            //
             // label4
-            // 
+            //
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(6, 103);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(30, 13);
             this.label4.TabIndex = 0;
             this.label4.Text = "Pass";
-            // 
+            //
             // _tbUser
-            // 
-            this._tbUser.Location = new System.Drawing.Point(54, 74);
+            //
+            this._tbUser.Location = new System.Drawing.Point(65, 74);
             this._tbUser.Name = "_tbUser";
-            this._tbUser.Size = new System.Drawing.Size(152, 20);
+            this._tbUser.Size = new System.Drawing.Size(192, 20);
             this._tbUser.TabIndex = 2;
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 77);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(29, 13);
             this.label3.TabIndex = 0;
             this.label3.Text = "User";
-            // 
+            //
             // _tbPort
-            // 
-            this._tbPort.Location = new System.Drawing.Point(54, 48);
+            //
+            this._tbPort.Location = new System.Drawing.Point(65, 48);
             this._tbPort.Name = "_tbPort";
-            this._tbPort.Size = new System.Drawing.Size(152, 20);
+            this._tbPort.Size = new System.Drawing.Size(192, 20);
             this._tbPort.TabIndex = 1;
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 51);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 13);
             this.label2.TabIndex = 0;
             this.label2.Text = "Port/Pipe";
-            // 
+            //
             // _tbHost
-            // 
-            this._tbHost.Location = new System.Drawing.Point(54, 22);
+            //
+            this._tbHost.Location = new System.Drawing.Point(65, 22);
             this._tbHost.Name = "_tbHost";
-            this._tbHost.Size = new System.Drawing.Size(152, 20);
+            this._tbHost.Size = new System.Drawing.Size(192, 20);
             this._tbHost.TabIndex = 0;
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 25);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(29, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Host";
-            // 
+            //
+            // _cbUseDBConnect
+            //
+            this._cbUseDBConnect.AutoSize = true;
+            this._cbUseDBConnect.Location = new System.Drawing.Point(11, 171);
+            this._cbUseDBConnect.Name = "_cbUseDBConnect";
+            this._cbUseDBConnect.Size = new System.Drawing.Size(63, 17);
+            this._cbUseDBConnect.TabIndex = 5;
+            this._cbUseDBConnect.Text = "Use DB";
+            this._cbUseDBConnect.UseVisualStyleBackColor = true;
+            this._cbUseDBConnect.CheckedChanged += new System.EventHandler(this.CbUseDbConnectCheckedChanged);
+            //
+            // _bTestConnect
+            //
+            this._bTestConnect.Location = new System.Drawing.Point(180, 167);
+            this._bTestConnect.Name = "_bTestConnect";
+            this._bTestConnect.Size = new System.Drawing.Size(95, 23);
+            this._bTestConnect.TabIndex = 6;
+            this._bTestConnect.Text = "Test connect";
+            this._bTestConnect.UseVisualStyleBackColor = true;
+            this._bTestConnect.Click += new System.EventHandler(this.BSaveSettingsClick);
+            //
             // _tbPath
-            // 
-            this._tbPath.Location = new System.Drawing.Point(66, 196);
+            //
+            this._tbPath.Location = new System.Drawing.Point(77, 196);
             this._tbPath.Name = "_tbPath";
-            this._tbPath.Size = new System.Drawing.Size(152, 20);
+            this._tbPath.Size = new System.Drawing.Size(192, 20);
             this._tbPath.TabIndex = 6;
             this._tbPath.Click += new System.EventHandler(this._tbPathClick);
-            this._tbPath.MouseHover += new System.EventHandler(this._tbPathMouseHover);
-            // 
+            //
             // label6
-            // 
+            //
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(9, 199);
             this.label6.Name = "label6";
@@ -168,54 +188,39 @@
             this.label6.TabIndex = 5;
             this.label6.Text = "DBC Path";
             //
-            // _cbUseDBConnect
-            // 
-            this._cbUseDBConnect.AutoSize = true;
-            this._cbUseDBConnect.Location = new System.Drawing.Point(11, 171);
-            this._cbUseDBConnect.Name = "_cbUseDBConnect";
-            this._cbUseDBConnect.Size = new System.Drawing.Size(106, 17);
-            this._cbUseDBConnect.TabIndex = 5;
-            this._cbUseDBConnect.Text = "Use DB Connect";
-            this._cbUseDBConnect.UseVisualStyleBackColor = true;
-            this._cbUseDBConnect.CheckedChanged += new System.EventHandler(this.CbUseDbConnectCheckedChanged);
-            // 
-            // _bTestConnect
-            // 
-            this._bTestConnect.Location = new System.Drawing.Point(123, 167);
-            this._bTestConnect.Name = "_bTestConnect";
-            this._bTestConnect.Size = new System.Drawing.Size(95, 23);
-            this._bTestConnect.TabIndex = 6;
-            this._bTestConnect.Text = "Test connect";
-            this._bTestConnect.UseVisualStyleBackColor = true;
-            this._bTestConnect.Click += new System.EventHandler(this.BSaveSettingsClick);
-            // 
             // _bSaveSettings
-            // 
-            this._bSaveSettings.Location = new System.Drawing.Point(66, 222);
+            //
+            this._bSaveSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this._bSaveSettings.Location = new System.Drawing.Point(180, 222);
             this._bSaveSettings.Name = "_bSaveSettings";
             this._bSaveSettings.Size = new System.Drawing.Size(95, 23);
             this._bSaveSettings.TabIndex = 7;
             this._bSaveSettings.Text = "Save";
             this._bSaveSettings.UseVisualStyleBackColor = true;
             this._bSaveSettings.Click += new System.EventHandler(this.BSaveSettingsClick);
-            // 
+            //
             // folderBrowserDialog1
-            // 
+            //
             this.folderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.DesktopDirectory;
             this.folderBrowserDialog1.SelectedPath = ".";
             this.folderBrowserDialog1.ShowNewFolderButton = false;
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.AutoPopDelay = 5000;
-            this.toolTip1.InitialDelay = 0;
-            this.toolTip1.ReshowDelay = 0;
-            // 
+            //
+            // _cbReadOnlyDB
+            //
+            this._cbReadOnlyDB.AutoSize = true;
+            this._cbReadOnlyDB.Location = new System.Drawing.Point(80, 171);
+            this._cbReadOnlyDB.Name = "_cbReadOnlyDB";
+            this._cbReadOnlyDB.Size = new System.Drawing.Size(94, 17);
+            this._cbReadOnlyDB.TabIndex = 13;
+            this._cbReadOnlyDB.Text = "DB Read Only";
+            this._cbReadOnlyDB.UseVisualStyleBackColor = true;
+            //
             // FormSettings
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(234, 250);
+            this.ClientSize = new System.Drawing.Size(287, 249);
+            this.Controls.Add(this._cbReadOnlyDB);
             this.Controls.Add(this._bSaveSettings);
             this.Controls.Add(this._bTestConnect);
             this.Controls.Add(this._cbUseDBConnect);
@@ -225,9 +230,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(250, 288);
+            this.MaximumSize = new System.Drawing.Size(303, 288);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(250, 288);
+            this.MinimumSize = new System.Drawing.Size(303, 288);
             this.Name = "FormSettings";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -260,6 +265,6 @@
         private System.Windows.Forms.TextBox _tbPath;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox _cbReadOnlyDB;
     }
 }

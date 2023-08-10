@@ -11,7 +11,7 @@
 namespace SpellWork.Properties
 {
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "10.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.6.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
     {
 
@@ -114,16 +114,34 @@ namespace SpellWork.Properties
                 this["UseDbConnect"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("dbc")]
-        public string DbcPath {
-            get {
+        public string DbcPath
+        {
+            get
+            {
                 return ((string)(this["DbcPath"]));
             }
-            set {
+            set
+            {
                 this["DbcPath"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DbIsReadOnly
+        {
+            get
+            {
+                return ((bool)(this["DbIsReadOnly"]));
+            }
+            set
+            {
+                this["DbIsReadOnly"] = value;
             }
         }
     }

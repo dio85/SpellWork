@@ -15,7 +15,8 @@ namespace SpellWork.Forms
         private void CbUseDbConnectCheckedChanged(object sender, EventArgs e)
         {
             _gbDbSetting.Enabled = ((CheckBox)sender).Checked;
-            this._bTestConnect.Enabled = _gbDbSetting.Enabled;
+            _cbReadOnlyDB.Enabled = _gbDbSetting.Enabled;
+            _bTestConnect.Enabled = _gbDbSetting.Enabled;
         }
 
         private void BSaveSettingsClick(object sender, EventArgs e)
@@ -26,6 +27,7 @@ namespace SpellWork.Forms
             Settings.Default.Pass = _tbPass.Text;
             Settings.Default.WorldDbName = _tbBase.Text;
             Settings.Default.UseDbConnect = _cbUseDBConnect.Checked;
+            Settings.Default.DbIsReadOnly = _cbReadOnlyDB.Checked;
             Settings.Default.DbcPath = _tbPath.Text;
 
             MySqlConnection.TestConnect();
@@ -49,6 +51,7 @@ namespace SpellWork.Forms
             _tbPass.Text = Settings.Default.Pass;
             _tbBase.Text = Settings.Default.WorldDbName;
             _gbDbSetting.Enabled = _cbUseDBConnect.Checked = Settings.Default.UseDbConnect;
+            _cbReadOnlyDB.Checked = Settings.Default.DbIsReadOnly;
             _tbPath.Text = Settings.Default.DbcPath;
         }
 
@@ -65,11 +68,6 @@ namespace SpellWork.Forms
                 Settings.Default.DbcPath = folderBrowserDialog1.SelectedPath;
                 Settings.Default.Save();
             }
-        }
-
-        private void _tbPathMouseHover(object sender, EventArgs e)
-        {
-            toolTip1.Show("Click to select folder path of dbcs", _tbPath);
         }
     }
 }

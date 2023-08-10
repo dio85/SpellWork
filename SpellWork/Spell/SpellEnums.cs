@@ -788,26 +788,26 @@ namespace SpellWork.Spell
 
     public enum SpellSchools
     {
-        SPELL_SCHOOL_NORMAL = 0,
-        SPELL_SCHOOL_HOLY   = 1,
-        SPELL_SCHOOL_FIRE   = 2,
-        SPELL_SCHOOL_NATURE = 3,
-        SPELL_SCHOOL_FROST  = 4,
-        SPELL_SCHOOL_SHADOW = 5,
-        SPELL_SCHOOL_ARCANE = 6
+        NORMAL = 0,
+        HOLY   = 1,
+        FIRE   = 2,
+        NATURE = 3,
+        FROST  = 4,
+        SHADOW = 5,
+        ARCANE = 6
     };
 
     [Flags]
-    public enum SpellSchoolMask
+    public enum SpellSchoolMask : byte
     {
         SPELL_SCHOOL_MASK_NONE    = 0x00,                       // not exist
-        SPELL_SCHOOL_MASK_NORMAL  = (1 << SpellSchools.SPELL_SCHOOL_NORMAL), // PHYSICAL (Armor)
-        SPELL_SCHOOL_MASK_HOLY    = (1 << SpellSchools.SPELL_SCHOOL_HOLY),
-        SPELL_SCHOOL_MASK_FIRE    = (1 << SpellSchools.SPELL_SCHOOL_FIRE),
-        SPELL_SCHOOL_MASK_NATURE  = (1 << SpellSchools.SPELL_SCHOOL_NATURE),
-        SPELL_SCHOOL_MASK_FROST   = (1 << SpellSchools.SPELL_SCHOOL_FROST),
-        SPELL_SCHOOL_MASK_SHADOW  = (1 << SpellSchools.SPELL_SCHOOL_SHADOW),
-        SPELL_SCHOOL_MASK_ARCANE  = (1 << SpellSchools.SPELL_SCHOOL_ARCANE),
+        SPELL_SCHOOL_MASK_NORMAL  = (1 << SpellSchools.NORMAL), // PHYSICAL (Armor)
+        SPELL_SCHOOL_MASK_HOLY    = (1 << SpellSchools.HOLY),
+        SPELL_SCHOOL_MASK_FIRE    = (1 << SpellSchools.FIRE),
+        SPELL_SCHOOL_MASK_NATURE  = (1 << SpellSchools.NATURE),
+        SPELL_SCHOOL_MASK_FROST   = (1 << SpellSchools.FROST),
+        SPELL_SCHOOL_MASK_SHADOW  = (1 << SpellSchools.SHADOW),
+        SPELL_SCHOOL_MASK_ARCANE  = (1 << SpellSchools.ARCANE),
 
         // unions
 
