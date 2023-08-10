@@ -160,30 +160,6 @@ namespace SpellWork.Extensions
             return val;
         }
 
-        public static void SetFlags<T>(this CheckedListBox clb)
-        {
-            clb.Items.Clear();
-
-            foreach (var elem in Enum.GetValues(typeof(T)))
-                clb.Items.Add(elem.ToString().NormalizeString(String.Empty));
-        }
-
-        public static void SetFlags<T>(this CheckedListBox clb, String remove)
-        {
-            clb.Items.Clear();
-
-            foreach (var elem in Enum.GetValues(typeof(T)))
-                clb.Items.Add(elem.ToString().NormalizeString(remove));
-        }
-
-        public static void SetFlags(this CheckedListBox clb, Type type, String remove)
-        {
-            clb.Items.Clear();
-
-            foreach (var elem in Enum.GetValues(type))
-                clb.Items.Add(elem.ToString().NormalizeString(remove));
-        }
-
         public static void SetEnumValues<T>(this ComboBox cb, string noValue)
         {
             var dt = new DataTable();

@@ -7,3 +7,5 @@ SpellWork/obj/*
 *.patch
 *.log
 _ReSharper*
+.vs
+packages
